@@ -7,17 +7,22 @@ dotenv.config();
 const app = express();
 const helmet = require('helmet');
 
-// Routes
+// Routes import
 const { exampleRouter } = require('./routes/example.routes');
+const { authRouter } = require('./routes/auth.routes');
 
+//middleware
 app.use(
     cors({
         origin: 'localhost:3000'
     })
 );
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(helmet());
-// Local example
-app.use('/api/example', exampleRouter);
+
+// Routes
+app.use('/api/auth/', authRouter);
 
 // Server Start
 app.listen(process.env.PORT || 3001, () => {
