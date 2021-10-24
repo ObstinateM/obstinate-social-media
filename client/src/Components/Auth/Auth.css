@@ -1,0 +1,87 @@
+:root {
+    --bg-blue: #161820;
+    --main-blue: #0dada7;
+    --red: #a80350;
+    --orange: #c1732c;
+    --gray: #fe3ef;
+    --white: #d8ddeb;
+    --black: #131313;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-weight: 400;
+    color: var(--white);
+    text-decoration: none;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.login-box {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-blue-low);
+    border: 1px solid var(--main-blue);
+    border-radius: 10px;
+    padding: 4rem 2rem;
+}
+
+.login-box h1 {
+    align-self: center;
+    padding-bottom: 1rem;
+}
+
+.login-box h3 {
+    color: var(--gray);
+    padding-bottom: 1.5rem;
+}
+
+.input {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    background-color: var(--white);
+    padding: 10px;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    color: var(--black);
+    border: none;
+}
+
+label {
+    margin-bottom: 0.5rem;
+}
+
+button {
+    margin: 1rem 0;
+    color: var(--black);
+    background-color: var(--main-blue);
+    border: none;
+    min-width: 10rem;
+    align-self: center;
+    border-radius: 10px;
+    font-size: 1.25rem;
+    padding: 0.75rem 0.75rem;
+}
+
+a {
+    font-size: 0.75rem;
+    align-self: flex-end;
+    color: var(--white);
+}
+
+.login-error {
+    color: var(--red);
+    margin-bottom: 1rem;
+}

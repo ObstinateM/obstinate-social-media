@@ -7,7 +7,7 @@ const extractJWT = (req, res, next) => {
 
     let token = req.headers.authorization?.split(' ')[1];
     if (token) {
-        jwt.verify(token, process.env.SERVER_TOKEN_SECRET, (error, decoced) => {
+        jwt.verify(token, process.env.SERVER_TOKEN_SECRET, { algorithm: ['HS256'] }, (error, decoced) => {
             if (error) return res.status(StatusCodes.NOT_FOUND).json({ message: error.message, error });
             res.locals.jwt = decoced;
             next();

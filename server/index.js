@@ -8,13 +8,12 @@ const app = express();
 const helmet = require('helmet');
 
 // Routes import
-const { exampleRouter } = require('./routes/example.routes');
 const { authRouter } = require('./routes/auth.routes');
 
 //middleware
 app.use(
     cors({
-        origin: 'localhost:3000'
+        origin: 'http://localhost:3000'
     })
 );
 app.use(express.urlencoded({ extended: true }));

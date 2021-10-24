@@ -1,0 +1,62 @@
+/** Main section */
+main {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    align-items: center;
+    padding: 4rem 0;
+}
+
+.post {
+    display: flex;
+    flex-direction: column;
+    min-width: 25rem;
+    max-width: 35rem;
+    border: 1px solid var(--white);
+    padding: 1rem 0;
+}
+
+.post-top {
+    display: flex;
+}
+
+.content,
+.action {
+    padding-right: 2rem;
+}
+
+.content-text {
+    margin: 0.5rem 0 1rem 0;
+}
+
+.profil-img {
+    width: 3rem;
+    height: 3rem;
+    border: 3px solid var(--main-blue);
+    border-radius: 50%;
+    margin: 0 1em;
+}
+
+/* Better aspect ratio w/ zoom */
+.post-img {
+    margin: 0;
+    width: auto;
+    max-width: 25rem;
+    height: auto;
+    max-height: 25rem;
+}
+
+.action {
+    display: flex;
+    font-size: 1.25rem;
+    padding-top: 1rem;
+}
+
+.action {
+    justify-content: flex-end;
+}
+
+.action a {
+    margin: 0 1rem;
+}

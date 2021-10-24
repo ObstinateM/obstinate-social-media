@@ -2,43 +2,66 @@ const { StatusCodes } = require('http-status-codes');
 const bcrypt = require('bcrypt');
 const signJWT = require('../../utils/signJWT');
 const { Connect, Query } = require('../../utils/db');
+const { doesEmailExist, isNameValid, doesNameExist } = require('../../utils/user');
 
-const validateToken = (req, res, next) => {
-    res.status(StatusCodes.ACCEPTED).json({
-        message: 'Token accepted'
-    });
+const validateToken = (req, res) => {
+    if (res.locals.jwt.name === 'test') {
+        res.status(StatusCodes.ACCEPTED).json({ message: "GG t'es test" });
+    } else {
+        res.status(StatusCodes.ACCEPTED).json({
+            message: 'Token accepted'
+        });
+    }
 };
 
-const register = (req, res, next) => {
+const register = (req, res) => {
     console.log(req.body);
-    let { name, email, password } = req.body;
+    let { name, email, password, password2 } = req.body;
 
-    bcrypt.hash(password, 10, (err, hash) => {
-        if (err) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message, error: err });
+    if (!name && !email && !password && !password2) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Invalid inputs.' });
+    }
 
-        let query = `INSERT INTO users(name, email, password) VALUES ("${name}", "${email}", "${hash}");`;
+    if (password !== password2) {
+        return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Password doesnt match.' });
+    }
 
-        Connect()
-            .then(connection => {
-                Query(connection, query)
-                    .then(result => {
-                        console.log(`User with id ${result.insertId} inserted.`);
-                        return res.status(StatusCodes.CREATED).json(result);
+    Promise.all([isNameValid(name), doesNameExist(name), doesEmailExist(email)])
+        .then(() => {
+            bcrypt.hash(password, 10, (err, hash) => {
+                if (err)
+                    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message, error: err });
+
+                let query = `INSERT INTO users(name, email, password) VALUES ("${name}", "${email}", "${hash}");`;
+
+                Connect()
+                    .then(connection => {
+                        Query(connection, query)
+                            .then(result => {
+                                console.log(`User with id ${result.insertId} inserted.`);
+                                return res.status(StatusCodes.CREATED).json({ message: 'Account created' });
+                            })
+                            .catch(error => {
+                                console.log('ERROR in auth.controllers.js :\n' + error.message, error);
+                                return res
+                                    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+                                    .json({ message: error.message, error });
+                            });
                     })
                     .catch(error => {
                         console.log('ERROR in auth.controllers.js :\n' + error.message, error);
                         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message, error });
                     });
-            })
-            .catch(error => {
-                console.log('ERROR in auth.controllers.js :\n' + error.message, error);
-                return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: error.message, error });
             });
-    });
+        })
+        .catch(() => {
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Invalid inputs.' });
+        });
 };
 
-const login = (req, res, next) => {
-    let { email, password } = req.body;
+const login = (req, res) => {
+    const { email, password } = req.body;
+    console.log(email, password);
     let query = `SELECT * FROM users WHERE email='${email}'`;
     console.log('Login passed');
     Connect()
@@ -51,14 +74,18 @@ const login = (req, res, next) => {
                         console.log('bcrypt passed', error, result);
                         if (error) {
                             return res.status(StatusCodes.UNAUTHORIZED).json({ message: error.message, error });
-                        } else if (result) {
+                        }
+
+                        if (result) {
                             signJWT(users[0], (_error, token) => {
                                 if (_error) {
                                     res.status(StatusCodes.UNAUTHORIZED).json({
                                         message: _error.message,
                                         error: _error
                                     });
-                                } else if (token) {
+                                }
+
+                                if (token) {
                                     res.status(StatusCodes.ACCEPTED).json({
                                         message: 'Auth successful',
                                         token,
@@ -71,7 +98,8 @@ const login = (req, res, next) => {
                                     });
                                 }
                             });
-                        }
+                        } else
+                            res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'Email or password is invalid.' });
                     });
                 })
                 .catch(error => {
@@ -85,7 +113,7 @@ const login = (req, res, next) => {
         });
 };
 
-const getAllUsers = (req, res, next) => {
+const getAllUsers = (req, res) => {
     let query = 'SELECT id, name FROM users';
     Connect()
         .then(connection => {
@@ -107,9 +135,43 @@ const getAllUsers = (req, res, next) => {
         });
 };
 
+const testEmail = (req, res) => {
+    let { email } = req.body;
+    doesEmailExist(email)
+        .then(() => {
+            res.status(StatusCodes.OK).json({ valid: true });
+        })
+        .catch(() => {
+            res.status(StatusCodes.UNAUTHORIZED).json({ valid: false });
+        });
+};
+
+const testName = (req, res) => {
+    let { name } = req.body;
+    Promise.all([isNameValid(name), doesNameExist(name)])
+        .then(() => {
+            res.status(StatusCodes.OK).json({ valid: true });
+        })
+        .catch(() => {
+            res.status(StatusCodes.UNAUTHORIZED).json({ valid: false });
+        });
+};
+
+const testPassword = (req, res) => {
+    let { password } = req.body;
+    if (password.length > 8) {
+        res.status(StatusCodes.ACCEPTED).json({ valid: true });
+    } else {
+        res.status(StatusCodes.NOT_ACCEPTABLE).json({ valid: false });
+    }
+};
+
 module.exports = {
     validateToken,
     login,
     register,
-    getAllUsers
+    getAllUsers,
+    testEmail,
+    testName,
+    testPassword
 };
