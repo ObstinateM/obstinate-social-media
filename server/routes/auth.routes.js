@@ -1,5 +1,8 @@
 const { Router } = require('express');
-const { validateToken, login, register, getAllUsers, refresh } = require('../controllers/auth/auth.controllers');
+const { validateToken, getAllUsers } = require('../controllers/auth/auth.controllers');
+const login = require('../controllers/auth/login.controllers');
+const register = require('../controllers/auth/register.controllers');
+const refresh = require('../controllers/auth/refreshToken.controllers');
 const extractJWT = require('../middleware/extractJWT.middleware');
 
 const router = Router();
