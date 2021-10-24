@@ -1,8 +1,15 @@
 const { StatusCodes } = require('http-status-codes');
 const bcrypt = require('bcrypt');
-const signJWT = require('../../utils/signJWT');
+const {
+    generateRefreshToken,
+    generateAccessToken,
+    addRefreshTokentoDB,
+    isRefreshTokenInDB,
+    deleteRefreshToken
+} = require('../../utils/signJWT');
 const { Connect, Query } = require('../../utils/db');
 const { doesEmailExist, isNameValid, doesNameExist } = require('../../utils/user');
+const jwt = require('jsonwebtoken');
 
 const validateToken = (req, res) => {
     if (res.locals.jwt.name === 'test') {
@@ -63,43 +70,34 @@ const login = (req, res) => {
     const { email, password } = req.body;
     console.log(email, password);
     let query = `SELECT * FROM users WHERE email='${email}'`;
-    console.log('Login passed');
     Connect()
         .then(connection => {
-            console.log('Connected');
             Query(connection, query)
                 .then(users => {
-                    console.log('bcrypt compare');
                     bcrypt.compare(password, users[0].password, (error, result) => {
-                        console.log('bcrypt passed', error, result);
                         if (error) {
                             return res.status(StatusCodes.UNAUTHORIZED).json({ message: error.message, error });
                         }
 
                         if (result) {
-                            signJWT(users[0], (_error, token) => {
-                                if (_error) {
-                                    res.status(StatusCodes.UNAUTHORIZED).json({
-                                        message: _error.message,
-                                        error: _error
-                                    });
-                                }
+                            let accessToken = generateAccessToken(users[0]);
+                            let refreshToken = generateRefreshToken(users[0]);
+                            console.log(refreshToken);
+                            addRefreshTokentoDB(refreshToken, err => {
+                                if (err) console.log(err);
 
-                                if (token) {
-                                    res.status(StatusCodes.ACCEPTED).json({
-                                        message: 'Auth successful',
-                                        token,
-                                        user: {
-                                            name: users[0].name,
-                                            email: users[0].email,
-                                            avatar: users[0].avatar,
-                                            bio: users[0].bio
-                                        }
-                                    });
-                                }
+                                res.status(StatusCodes.ACCEPTED).json({
+                                    name: users[0].name,
+                                    email: users[0].email,
+                                    avatar: users[0].avatar,
+                                    bio: users[0].bio,
+                                    accessToken,
+                                    refreshToken
+                                });
                             });
-                        } else
-                            res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'Email or password is invalid.' });
+                        } else {
+                            res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'Wrong credentials.' });
+                        }
                     });
                 })
                 .catch(error => {
@@ -135,35 +133,41 @@ const getAllUsers = (req, res) => {
         });
 };
 
-const testEmail = (req, res) => {
-    let { email } = req.body;
-    doesEmailExist(email)
-        .then(() => {
-            res.status(StatusCodes.OK).json({ valid: true });
-        })
-        .catch(() => {
-            res.status(StatusCodes.UNAUTHORIZED).json({ valid: false });
+const refresh = (req, res) => {
+    const { refreshToken } = req.body;
+    if (!refreshToken) return res.status(401).json({ message: 'You are not authentificated!' });
+    isRefreshTokenInDB(refreshToken, (exist, err) => {
+        console.log(err);
+        if (err) return res.status(500).json({ message: 'Internal Server Error err' });
+        console.log(exist, err);
+        if (!exist) return res.status(403).json({ message: 'Refresh token is not valid.' });
+        jwt.verify(refreshToken, process.env.SERVER_REFRESH_TOKEN_SECRET, (err, user) => {
+            if (err) console.log(err);
+            deleteRefreshToken(refreshToken, result => {
+                console.log(result);
+                if (result.isValid) {
+                    let accessToken = generateAccessToken(user);
+                    let refreshToken = generateRefreshToken(user);
+                    addRefreshTokentoDB(refreshToken, err => {
+                        if (err) console.log(err);
+                        console.log('USER FZEEFFZEZEFJZFEJEFZJFZEJFEZJFZEJJFZEJFZEJFZ :', user);
+                        console.log(result);
+                        res.status(StatusCodes.ACCEPTED).json({
+                            name: user.name,
+                            email: user.email,
+                            avatar: user.avatar,
+                            bio: user.bio,
+                            accessToken,
+                            refreshToken
+                        });
+                    });
+                } else {
+                    console.log('Error in deleteRefreshToken :', result.err);
+                    res.status(500).json({ message: 'Internal Server Error' });
+                }
+            });
         });
-};
-
-const testName = (req, res) => {
-    let { name } = req.body;
-    Promise.all([isNameValid(name), doesNameExist(name)])
-        .then(() => {
-            res.status(StatusCodes.OK).json({ valid: true });
-        })
-        .catch(() => {
-            res.status(StatusCodes.UNAUTHORIZED).json({ valid: false });
-        });
-};
-
-const testPassword = (req, res) => {
-    let { password } = req.body;
-    if (password.length > 8) {
-        res.status(StatusCodes.ACCEPTED).json({ valid: true });
-    } else {
-        res.status(StatusCodes.NOT_ACCEPTABLE).json({ valid: false });
-    }
+    });
 };
 
 module.exports = {
@@ -171,7 +175,5 @@ module.exports = {
     login,
     register,
     getAllUsers,
-    testEmail,
-    testName,
-    testPassword
+    refresh
 };
