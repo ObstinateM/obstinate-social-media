@@ -28,6 +28,7 @@ const login = (req, res) => {
                                     expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
                                 });
                                 res.status(StatusCodes.ACCEPTED).json({
+                                    id: users[0].id,
                                     name: users[0].name,
                                     email: users[0].email,
                                     avatar: users[0].avatar,

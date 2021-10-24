@@ -10,16 +10,15 @@ const jwt = require('jsonwebtoken');
 
 const refresh = (req, res) => {
     const { refreshToken } = req.body;
+
     if (!refreshToken) return res.status(401).json({ message: 'You are not authentificated!' });
+
     isRefreshTokenInDB(refreshToken, (exist, err) => {
-        console.log(err);
         if (err) return res.status(500).json({ message: 'Internal Server Error err' });
-        console.log(exist, err);
         if (!exist) return res.status(403).json({ message: 'Refresh token is not valid.' });
         jwt.verify(refreshToken, process.env.SERVER_REFRESH_TOKEN_SECRET, { algorithm: ['HS256'] }, (err, user) => {
             if (err) console.log(err);
             deleteRefreshToken(refreshToken, result => {
-                console.log(result);
                 if (result.isValid) {
                     let accessToken = generateAccessToken(user);
                     let refreshToken = generateRefreshToken(user);
@@ -30,6 +29,7 @@ const refresh = (req, res) => {
                             expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
                         });
                         res.status(StatusCodes.ACCEPTED).json({
+                            id: user.id,
                             name: user.name,
                             email: user.email,
                             avatar: user.avatar,

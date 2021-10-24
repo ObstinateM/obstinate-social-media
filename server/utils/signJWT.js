@@ -6,6 +6,7 @@ require('dotenv').config();
 const generateAccessToken = user => {
     return jwt.sign(
         {
+            id: user.id,
             name: user.name,
             email: user.email,
             avatar: user.avatar,
@@ -23,6 +24,7 @@ const generateAccessToken = user => {
 const generateRefreshToken = user => {
     return jwt.sign(
         {
+            id: user.id,
             name: user.name,
             email: user.email,
             avatar: user.avatar,
@@ -31,7 +33,8 @@ const generateRefreshToken = user => {
         process.env.SERVER_REFRESH_TOKEN_SECRET,
         {
             issuer: process.env.SERVER_TOKEN_ISSUER,
-            algorithm: 'HS256'
+            algorithm: 'HS256',
+            expiresIn: '7d'
         }
     );
 };
@@ -64,7 +67,7 @@ const deleteRefreshToken = (token, callback) => {
     Connect()
         .then(connection => {
             Query(connection, `DELETE FROM refreshToken WHERE refreshToken = '${token}'`)
-                .then(result => {
+                .then(_ => {
                     console.log('Successfully deleted token : ', token);
                     callback({ isValid: true, err: null });
                 })
