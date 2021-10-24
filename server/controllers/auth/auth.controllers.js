@@ -86,13 +86,16 @@ const login = (req, res) => {
                             addRefreshTokentoDB(refreshToken, err => {
                                 if (err) console.log(err);
 
+                                res.cookie('refreshToken', refreshToken, {
+                                    httpOnly: true,
+                                    expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
+                                });
                                 res.status(StatusCodes.ACCEPTED).json({
                                     name: users[0].name,
                                     email: users[0].email,
                                     avatar: users[0].avatar,
                                     bio: users[0].bio,
-                                    accessToken,
-                                    refreshToken
+                                    accessToken
                                 });
                             });
                         } else {
@@ -152,13 +155,17 @@ const refresh = (req, res) => {
                         if (err) console.log(err);
                         console.log('USER FZEEFFZEZEFJZFEJEFZJFZEJFEZJFZEJJFZEJFZEJFZ :', user);
                         console.log(result);
+                        res.cookie('refreshToken', refreshToken, {
+                            httpOnly: true,
+                            expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
+                        });
                         res.status(StatusCodes.ACCEPTED).json({
                             name: user.name,
                             email: user.email,
                             avatar: user.avatar,
                             bio: user.bio,
                             accessToken,
-                            refreshToken
+                            refreshToken // For debug purposes only, DELETE AFTER
                         });
                     });
                 } else {
