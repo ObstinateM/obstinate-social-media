@@ -5,7 +5,6 @@ const { Connect, Query } = require('../../utils/db');
 
 const login = (req, res) => {
     const { email, password } = req.body;
-    console.log(email, password);
     let query = `SELECT * FROM users WHERE email='${email}'`;
     Connect()
         .then(connection => {
@@ -19,13 +18,12 @@ const login = (req, res) => {
                         if (result) {
                             let accessToken = generateAccessToken(users[0]);
                             let refreshToken = generateRefreshToken(users[0]);
-                            console.log(refreshToken);
                             addRefreshTokentoDB(refreshToken, err => {
                                 if (err) console.log(err);
 
                                 res.cookie('refreshToken', refreshToken, {
                                     httpOnly: true,
-                                    expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
+                                    expires: new Date(Date.now() + 7 * 24 * 3600000) // Cookie removed after 24 hours
                                 });
                                 res.status(StatusCodes.ACCEPTED).json({
                                     id: users[0].id,
@@ -33,7 +31,8 @@ const login = (req, res) => {
                                     email: users[0].email,
                                     avatar: users[0].avatar,
                                     bio: users[0].bio,
-                                    accessToken
+                                    accessToken,
+                                    refreshToken
                                 });
                             });
                         } else {

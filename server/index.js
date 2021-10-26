@@ -5,6 +5,7 @@ const path = require('path');
 const cors = require('cors');
 const app = express();
 const helmet = require('helmet');
+const cookieParser = require('cookie-parser');
 
 // Routes import
 const { authRouter } = require('./routes/auth.routes');
@@ -19,6 +20,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
+app.use(cookieParser());
 
 // Routes
 app.use('/api/auth/', authRouter);

@@ -5,22 +5,22 @@ export const Feed = () => {
     const [posts, setPosts] = useState([
         {
             img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'cc',
+            username: 'Paulo',
             content: 'lorem30'
         },
         {
             img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'CAVA',
+            username: 'M Roger',
             content: 'lorem30'
         },
         {
             img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'SUPER',
+            username: 'Hubzmodd',
             content: 'lorem30'
         },
         {
             img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'NIQUEL',
+            username: 'TG',
             content: 'lorem30'
         },
         {

@@ -9,7 +9,7 @@ const {
 const jwt = require('jsonwebtoken');
 
 const refresh = (req, res) => {
-    const { refreshToken } = req.body;
+    const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) return res.status(401).json({ message: 'You are not authentificated!' });
 
@@ -24,23 +24,24 @@ const refresh = (req, res) => {
                     let refreshToken = generateRefreshToken(user);
                     addRefreshTokentoDB(refreshToken, err => {
                         if (err) console.log(err);
-                        res.cookie('refreshToken', refreshToken, {
-                            httpOnly: true,
-                            expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
-                        });
-                        res.status(StatusCodes.ACCEPTED).json({
-                            id: user.id,
-                            name: user.name,
-                            email: user.email,
-                            avatar: user.avatar,
-                            bio: user.bio,
-                            accessToken,
-                            refreshToken // For debug purposes only, DELETE AFTER
-                        });
+                        return res
+                            .cookie('refreshToken', refreshToken, {
+                                httpOnly: true,
+                                expires: new Date(Date.now() + 24 * 3600000) // Cookie removed after 24 hours
+                            })
+                            .status(StatusCodes.ACCEPTED)
+                            .json({
+                                id: user.id,
+                                name: user.name,
+                                email: user.email,
+                                avatar: user.avatar,
+                                bio: user.bio,
+                                accessToken,
+                                refreshToken // For debug purposes only, DELETE AFTER
+                            });
                     });
                 } else {
-                    console.log('Error in deleteRefreshToken :', result.err);
-                    res.status(500).json({ message: 'Internal Server Error' });
+                    return res.status(500).json({ message: 'Internal Server Error' });
                 }
             });
         });

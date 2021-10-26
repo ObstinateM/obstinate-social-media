@@ -68,7 +68,6 @@ const deleteRefreshToken = (token, callback) => {
         .then(connection => {
             Query(connection, `DELETE FROM refreshToken WHERE refreshToken = '${token}'`)
                 .then(_ => {
-                    console.log('Successfully deleted token : ', token);
                     callback({ isValid: true, err: null });
                 })
                 .catch(err => callback({ isValid: false, err }));
