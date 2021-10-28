@@ -1,63 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect, useContext } from 'react';
 import './Posts.css';
+import { UserContext } from 'App';
 
 export const Feed = () => {
-    const [posts, setPosts] = useState([
-        {
-            img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'Paulo',
-            content: 'lorem30'
-        },
-        {
-            img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'M Roger',
-            content: 'lorem30'
-        },
-        {
-            img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'Hubzmodd',
-            content: 'lorem30'
-        },
-        {
-            img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'TG',
-            content: 'lorem30'
-        },
-        {
-            img: 'https://lh3.googleusercontent.com/a-/AOh14Gg1eiJhr7ZUBAw2K_TadASYlwpIf6Z6dcZIXBXqWA=s96-c',
-            username: 'ET TOI ?',
-            content: 'lorem30',
-            contentImg: 'https://via.placeholder.com/1920x3000'
-        }
-    ]);
-    console.log('passed');
-    // useEffect(() => {
-    //     const fetchAPI = async () => {
-    //         const res = await fetch('localhost:3001/');
-    //     };
-    //     fetchAPI();
-    // }, []);
+    const [posts, setPosts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const { user } = useContext(UserContext);
+
+    useEffect(() => {
+        axios({
+            method: 'GET',
+            url: 'http://localhost:3001/api/private/posts/getallposts',
+            headers: { Authorization: `Bearer ${user.accessToken}` }
+        })
+            .then(res => {
+                console.log('LA REPONSEEEEEEEEE', res);
+                setPosts(res.data.posts);
+                setIsLoading(false);
+                console.log(posts);
+            })
+            .catch(err => {
+                console.log(err);
+                setIsLoading(false);
+            });
+    }, []);
+
+    if (isLoading) return <h1>Loading posts...</h1>;
 
     return posts.map(post => (
-        <Post img={post.img} username={post.username} content={post.content} contentImg={post.contentImg} />
+        <Post
+            key={post.id}
+            avatar={post.avatar}
+            username={post.author}
+            content={post.content}
+            contentImg={post.contentImg}
+        />
     ));
 };
 
-const Post = ({ img, username, content, contentImg }) => {
+const Post = ({ avatar, username, content, contentImg }) => {
     console.log('passed');
     return (
-        <div class="post">
-            <div class="post-top">
-                <img src={img} alt="user profile" class="profil-img" />
-                <div class="content">
-                    <a class="content-title" href="#">
+        <div className="post">
+            <div className="post-top">
+                <img src={avatar} alt="user profile" className="profil-img" />
+                <div className="content">
+                    <a className="content-title" href="#">
                         {username}
                     </a>
-                    <p class="content-text">{content}</p>
-                    {contentImg && <img src={contentImg} alt="" class="post-img" />}
+                    <p className="content-text">{content}</p>
+                    {contentImg && <img src={contentImg} alt="" className="post-img" />}
                 </div>
             </div>
-            <div class="action">
+            <div className="action">
                 <a href="#">Like</a>
                 <a href="#">Comments</a>
                 <a href="#">Share</a>

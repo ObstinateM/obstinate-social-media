@@ -4,6 +4,7 @@ import { Navbar, NavTitle, UserInfo, NavItem, NavSection } from 'Components/Navb
 import toast, { Toaster } from 'react-hot-toast';
 import { Feed } from './Components/Posts/Posts';
 import { Register, Login } from './Components/Auth/Auth';
+import GuardedRoute from 'Components/GuaredRoute/GuaredRoute';
 import './App.css';
 import axios from 'axios';
 
@@ -85,19 +86,21 @@ export function App() {
     return (
         <UserContext.Provider value={value}>
             <Toaster />
-            <Router>
+            <Router forceRefresh={true}>
                 <Navbar>
                     <NavTitle icon="images/work-in-progress.png" title="Twitter V2" />
                     <UserInfo picture={user.avatar} name={user.name} />
                     <NavSection sectionName="MAIN NAVIGATION">
-                        <NavItem icon="images/dashboard.png" title="Dashboard" href="/" />
-                        <NavItem icon="images/settings.png" title="Settings" href="/settings" />
+                        <NavItem icon="images/dashboard.png" title="Home" href="/" />
+                        <NavItem icon="images/settings.png" title="Profil" href="/profil" />
+                        <NavItem icon="images/settings.png" title="Settings" href="/admin" />
                         <NavItem icon="images/logout.png" title="Logout" click={logout} />
                     </NavSection>
                 </Navbar>
                 <main>
                     <Switch>
                         <Route path="/" exact component={Feed} />
+                        <GuardedRoute path="/admin" canAccess={false} component={() => <h1>Admin</h1>} />
                         <Route path="/" component={() => <h1>404 Error</h1>} />
                     </Switch>
                 </main>

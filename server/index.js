@@ -9,6 +9,7 @@ const cookieParser = require('cookie-parser');
 
 // Routes import
 const { authRouter } = require('./routes/auth.routes');
+const { postsRouter } = require('./routes/posts.routes');
 
 //middleware
 app.use(
@@ -24,6 +25,7 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/auth/', authRouter);
+app.use('/api/private/posts/', postsRouter);
 
 // Server Start
 app.listen(process.env.PORT || 3001, () => {
