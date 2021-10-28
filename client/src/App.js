@@ -78,6 +78,7 @@ export function App() {
     if (!isLoggedIn)
         return (
             <UserContext.Provider value={value}>
+                <Toaster />
                 <Router forceRefresh={true}>
                     <Switch>
                         <Route path="/register" component={Register} />

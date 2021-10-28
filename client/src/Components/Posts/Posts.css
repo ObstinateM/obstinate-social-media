@@ -11,8 +11,7 @@ main {
 .post {
     display: flex;
     flex-direction: column;
-    min-width: 25rem;
-    max-width: 35rem;
+    min-width: 27rem;
     border: 1px solid var(--white);
     padding: 1rem 0;
 }

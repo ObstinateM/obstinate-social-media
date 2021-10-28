@@ -57,7 +57,7 @@
 }
 
 .input a {
-    font-size: 0.75rem;
+    font-size: 1rem;
     align-self: flex-end;
     color: var(--white);
 }

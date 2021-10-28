@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import './Auth.css';
@@ -11,6 +11,7 @@ export function Register() {
     const email = useRef(null);
     const password = useRef(null);
     const password2 = useRef(null);
+    let history = useHistory();
 
     const resetForm = () => {
         name.current.value = '';
@@ -35,12 +36,10 @@ export function Register() {
             .then(res => {
                 console.log(res);
                 if (res.status === 201) {
-                    toast.success('Successfully created! You can now login.');
-                    resetForm();
+                    history.push('/login');
                 } else {
                     console.log(res.data);
                     setError(res.data);
-
                     toast.error('Cannot create account!');
                 }
             })
@@ -79,6 +78,7 @@ export const Login = () => {
     const email = useRef(null);
     const password = useRef(null);
     const { setIsLoggedIn, setUser } = useContext(UserContext);
+    let history = useHistory();
 
     const handleSubmit = () => {
         setError(null);
@@ -94,12 +94,10 @@ export const Login = () => {
         })
             .then(res => {
                 if (res.status === 202) {
-                    // Login + Redirect
                     console.log(res.data);
                     setUser(res.data);
                     setIsLoggedIn(true);
-                    toast.success("You're now logged in");
-                    console.log('GG WP');
+                    history.push('/');
                 } else {
                     console.log(res);
                     setError('Server error, please try again');
