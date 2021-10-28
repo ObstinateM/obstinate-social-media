@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect, useContext } from 'react';
+import { Link } from 'react-router-dom';
 import './Posts.css';
 import { UserContext } from 'App';
 
@@ -15,13 +16,11 @@ export const Feed = () => {
             headers: { Authorization: `Bearer ${user.accessToken}` }
         })
             .then(res => {
-                console.log('LA REPONSEEEEEEEEE', res);
                 setPosts(res.data.posts);
                 setIsLoading(false);
-                console.log(posts);
             })
             .catch(err => {
-                console.log(err);
+                console.log(err.response);
                 setIsLoading(false);
             });
     }, []);
@@ -40,23 +39,22 @@ export const Feed = () => {
 };
 
 const Post = ({ avatar, username, content, contentImg }) => {
-    console.log('passed');
     return (
         <div className="post">
             <div className="post-top">
                 <img src={avatar} alt="user profile" className="profil-img" />
                 <div className="content">
-                    <a className="content-title" href="#">
+                    <Link className="content-title" to={username}>
                         {username}
-                    </a>
+                    </Link>
                     <p className="content-text">{content}</p>
                     {contentImg && <img src={contentImg} alt="" className="post-img" />}
                 </div>
             </div>
             <div className="action">
-                <a href="#">Like</a>
-                <a href="#">Comments</a>
-                <a href="#">Share</a>
+                <button>Like</button>
+                <button>Comments</button>
+                <button>Share</button>
             </div>
         </div>
     );

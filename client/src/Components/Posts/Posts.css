@@ -60,3 +60,27 @@ main {
 .action a {
     margin: 0 1rem;
 }
+
+.post button {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+    cursor: pointer;
+}
+
+.post button:hover {
+    background: transparent;
+    box-shadow: 0px 0px 0px transparent;
+    border: 0px solid transparent;
+    text-shadow: 0px 0px 0px transparent;
+}
+
+.post button:active {
+    outline: none;
+    border: none;
+}
+
+.post button:focus {
+    outline: 0;
+}

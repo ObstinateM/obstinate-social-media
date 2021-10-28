@@ -18,18 +18,6 @@ export function App() {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    // TODO : Add isLoading state
-    const value = useMemo(
-        () => ({
-            isLoading,
-            isLoggedIn,
-            setIsLoggedIn,
-            user,
-            setUser
-        }),
-        [isLoggedIn, user]
-    );
-
     const logout = () => {
         axios({
             method: 'GET',
@@ -56,8 +44,8 @@ export function App() {
                 if (res.status === 202) {
                     // Login + Redirect
                     console.log(res.data);
-                    setIsLoggedIn(true);
                     setUser(res.data);
+                    setIsLoggedIn(true);
                     setTimeout(() => {
                         refreshToken();
                     }, 15 * 60 * 1000 - 5000);
@@ -75,11 +63,27 @@ export function App() {
         refreshToken();
     }, []);
 
+    const value = useMemo(
+        () => ({
+            isLoading,
+            isLoggedIn,
+            setIsLoggedIn,
+            user,
+            setUser
+        }),
+        [isLoading, isLoggedIn, user]
+    );
+
     if (isLoading) return <h1>Loading...</h1>;
     if (!isLoggedIn)
         return (
             <UserContext.Provider value={value}>
-                <Login />
+                <Router forceRefresh={true}>
+                    <Switch>
+                        <Route path="/register" component={Register} />
+                        <Route path="/" component={Login} />
+                    </Switch>
+                </Router>
             </UserContext.Provider>
         );
 

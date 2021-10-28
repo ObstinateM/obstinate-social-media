@@ -1,5 +1,5 @@
 import React, { useRef, useState, useContext } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import './Auth.css';
@@ -57,17 +57,17 @@ export function Register() {
                 <h3>You need to register in order to access the website.</h3>
                 <div class="input">
                     {error && <p class="login-error">Error: {error}</p>}
-                    <label for="email">Email</label>
+                    <label htmlFor="email">Email</label>
                     <input type="email" placeholder="Johndoe@example.com" name="email" ref={email} />
-                    <label for="name">Username</label>
+                    <label htmlFor="name">Username</label>
                     <input type="text" placeholder="John Doe" name="name" ref={name} />
-                    <label for="password">Password</label>
+                    <label htmlFor="password">Password</label>
                     <input type="password" name="password" id="password" placeholder="*********" ref={password} />
-                    <label for="password2">Confirm Password</label>
+                    <label htmlFor="password2">Confirm Password</label>
                     <input type="password" name="password2" id="password2" placeholder="*********" ref={password2} />
                     <button onClick={handleSubmit}>Submit</button>
-                    <a href="#">Forgot password ?</a>
-                    <a href="#">Already an account?</a>
+                    <Link to="/">Forgot password ?</Link>
+                    <Link to="/login">Already an account?</Link>
                 </div>
             </div>
         </div>
@@ -96,9 +96,8 @@ export const Login = () => {
                 if (res.status === 202) {
                     // Login + Redirect
                     console.log(res.data);
-                    setIsLoggedIn(true);
                     setUser(res.data);
-                    setError('Now logged in, GG WP');
+                    setIsLoggedIn(true);
                     toast.success("You're now logged in");
                     console.log('GG WP');
                 } else {
@@ -116,18 +115,18 @@ export const Login = () => {
 
     return (
         <div className="login">
-            <div class="login-box">
+            <div className="login-box">
                 <h1>Login</h1>
                 <h3>You need to login in order to access the website.</h3>
-                <div class="input">
-                    {error && <p class="login-error">Error: {error}</p>}
-                    <label for="email">Email</label>
+                <div className="input">
+                    {error && <p className="login-error">Error: {error}</p>}
+                    <label htmlFor="email">Email</label>
                     <input type="email" placeholder="Johndoe@example.com" name="email" ref={email} />
-                    <label for="password">Password</label>
+                    <label htmlFor="password">Password</label>
                     <input type="password" name="password" id="password" placeholder="*********" ref={password} />
                     <button onClick={handleSubmit}>Submit</button>
-                    <a href="#">Forgot password ?</a>
-                    <a href="#">No account?</a>
+                    <Link to="/">Forgot password ?</Link>
+                    <Link to="/register">No account?</Link>
                 </div>
             </div>
         </div>
