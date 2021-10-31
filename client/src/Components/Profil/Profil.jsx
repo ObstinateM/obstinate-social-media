@@ -3,7 +3,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Post } from '../Posts/Posts';
 import { UserContext } from 'App';
-import toast from 'react-hot-toast';
 import '../Posts/Posts.css';
 import './Profil.css';
 

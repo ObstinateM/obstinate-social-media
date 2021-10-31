@@ -95,8 +95,8 @@ export function App() {
     return (
         <UserContext.Provider value={value}>
             <Toaster />
-            <CreatePost isShowing={isShowing} toggle={toggle} />
             <Router forceRefresh={true}>
+                <CreatePost isShowing={isShowing} toggle={toggle} />
                 <Navbar>
                     <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Twitter V2" />
                     <UserInfo picture={user.avatar} name={user.name} />

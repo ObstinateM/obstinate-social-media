@@ -13,13 +13,6 @@ export function Register() {
     const password2 = useRef(null);
     let history = useHistory();
 
-    const resetForm = () => {
-        name.current.value = '';
-        email.current.value = '';
-        password.current.value = '';
-        password2.current.value = '';
-    };
-
     const handleSubmit = async () => {
         setError(null);
         axios({

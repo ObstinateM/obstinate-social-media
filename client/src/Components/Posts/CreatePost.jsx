@@ -23,15 +23,15 @@ export const CreatePost = ({ isShowing, toggle }) => {
             })
         })
             .then(res => {
-                console.log(res.response);
+                console.log('PASSING THEN', res.status);
                 if (res.status === 201) {
                     console.log('Created', res.data.message);
                     history.push('/');
                 }
             })
             .catch(err => {
-                console.log(err.response.data.error.message);
-                setError(err.response.data.error.message);
+                console.log(err);
+                setError('An error has occured. Please retry.');
             });
     };
 
