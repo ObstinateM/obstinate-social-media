@@ -115,7 +115,9 @@ export const Login = () => {
                     <input type="email" placeholder="Johndoe@example.com" name="email" ref={email} />
                     <label htmlFor="password">Password</label>
                     <input type="password" name="password" id="password" placeholder="*********" ref={password} />
-                    <button onClick={handleSubmit}>Submit</button>
+                    <button onClick={handleSubmit} type="submit">
+                        Submit
+                    </button>
                     <Link to="/">Forgot password ?</Link>
                     <Link to="/register">No account?</Link>
                 </div>
