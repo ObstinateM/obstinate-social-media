@@ -1,13 +1,19 @@
 import axios from 'axios';
-import React, { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import './Posts.css';
 import { UserContext } from 'App';
+import toast from 'react-hot-toast';
+import './Posts.css';
 
 export const Feed = () => {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(UserContext);
+    const [handleRerender, setHandleRerender] = useState(false);
+
+    const rerender = () => {
+        setHandleRerender(!handleRerender);
+    };
 
     useEffect(() => {
         axios({
@@ -23,22 +29,46 @@ export const Feed = () => {
                 console.log(err.response);
                 setIsLoading(false);
             });
-    }, []);
+    }, [handleRerender]);
 
     if (isLoading) return <h1>Loading posts...</h1>;
 
     return posts.map(post => (
         <Post
             key={post.id}
+            id={post.id}
             avatar={post.avatar}
             username={post.author}
             content={post.content}
             contentImg={post.contentImg}
+            canDelete={post.id_user === user.id}
+            rerender={rerender}
         />
     ));
 };
 
-const Post = ({ avatar, username, content, contentImg }) => {
+const Post = ({ id, avatar, username, content, contentImg, canDelete, rerender }) => {
+    const { user } = useContext(UserContext);
+
+    const handleDelete = () => {
+        console.log(id);
+        axios({
+            method: 'DELETE',
+            url: 'http://localhost:3001/api/private/posts/delete',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
+            data: JSON.stringify({
+                post_id: id
+            })
+        })
+            .then(_ => {
+                toast.success('Successfully deleted');
+                rerender();
+            })
+            .catch(_ => {
+                toast.error('Cant delete this post');
+            });
+    };
+
     return (
         <div className="post">
             <div className="post-top">
@@ -52,6 +82,7 @@ const Post = ({ avatar, username, content, contentImg }) => {
                 </div>
             </div>
             <div className="action">
+                {canDelete ? <button onClick={handleDelete}>Delete</button> : null}
                 <button>Like</button>
                 <button>Comments</button>
                 <button>Share</button>

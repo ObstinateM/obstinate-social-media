@@ -6,3 +6,10 @@ main {
     justify-content: space-evenly;
     padding: 4em 4em;
 }
+
+.create-button {
+    position: fixed;
+    right: 2rem;
+    bottom: 2rem;
+    border-radius: 50%;
+}

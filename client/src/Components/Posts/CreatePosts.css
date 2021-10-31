@@ -1,0 +1,61 @@
+.modal {
+    background-color: var(--bg-blue);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
+
+.bg {
+    position: fixed;
+    top: 0;
+    background-color: #44444494;
+    height: 100vh;
+    width: 100vw;
+}
+
+.input_post form {
+    width: 30rem;
+    height: 28rem;
+    padding: 2rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+    border: 1px solid var(--main-blue);
+}
+
+.input_post h1 {
+    margin-bottom: 2rem;
+}
+
+.input_post textarea {
+    color: var(--black);
+    height: 10rem;
+    border-radius: 10px;
+}
+
+.submit-button {
+    background-color: var(--main-blue);
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+    border-radius: 10px;
+}
+
+.close-button {
+    position: absolute;
+    right: 1px;
+    top: 1px;
+    background-color: var(--bg-blue);
+    border: none;
+    cursor: pointer;
+}
+
+.error {
+    color: var(--red);
+    margin-bottom: 1rem;
+}

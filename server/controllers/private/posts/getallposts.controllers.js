@@ -3,7 +3,7 @@ const { Connect, Query } = require('../../../utils/db');
 
 const getAllPosts = (req, res) => {
     let query =
-        'SELECT posts.*, users.name as author, users.avatar as avatar FROM posts JOIN users ON users.id = posts.id_user LIMIT 30';
+        'SELECT posts.*, users.name as author, users.avatar as avatar FROM posts JOIN users ON users.id = posts.id_user ORDER BY posts.id DESC LIMIT 30';
     Connect()
         .then(connection => {
             Query(connection, query)

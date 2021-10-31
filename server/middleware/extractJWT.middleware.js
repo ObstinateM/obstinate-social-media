@@ -4,7 +4,7 @@ require('dotenv').config();
 
 const extractJWT = (req, res, next) => {
     let token = req.headers.authorization?.split(' ')[1];
-    console.log('Validating a token');
+    console.log('Validating a token :\n' + token);
     if (token) {
         jwt.verify(token, process.env.SERVER_TOKEN_SECRET, { algorithm: ['HS256'] }, (error, decoced) => {
             if (error) return res.status(StatusCodes.NOT_FOUND).json({ message: error.message, error });

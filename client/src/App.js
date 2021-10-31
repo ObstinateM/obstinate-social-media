@@ -3,8 +3,10 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Navbar, NavTitle, UserInfo, NavItem, NavSection } from 'Components/Navbar/Navbar';
 import toast, { Toaster } from 'react-hot-toast';
 import { Feed } from './Components/Posts/Posts';
+import { CreatePost } from 'Components/Posts/CreatePost';
 import { Register, Login } from './Components/Auth/Auth';
 import GuardedRoute from 'Components/GuaredRoute/GuaredRoute';
+import { useModal } from 'Hook/useModal';
 import './App.css';
 import axios from 'axios';
 
@@ -17,6 +19,7 @@ export function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
+    const { isShowing, toggle } = useModal();
 
     const logout = () => {
         axios({
@@ -91,6 +94,7 @@ export function App() {
     return (
         <UserContext.Provider value={value}>
             <Toaster />
+            <CreatePost isShowing={isShowing} toggle={toggle} />
             <Router forceRefresh={true}>
                 <Navbar>
                     <NavTitle icon="images/work-in-progress.png" title="Twitter V2" />
@@ -103,6 +107,9 @@ export function App() {
                     </NavSection>
                 </Navbar>
                 <main>
+                    <button className="create-button" onClick={toggle}>
+                        <img src="images/writing.png" alt="Create new" />
+                    </button>
                     <Switch>
                         <Route path="/" exact component={Feed} />
                         <GuardedRoute path="/admin" canAccess={false} component={() => <h1>Admin</h1>} />
