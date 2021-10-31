@@ -39,6 +39,7 @@ export const Feed = () => {
             id={post.id}
             avatar={post.avatar}
             username={post.author}
+            authorId={post.id_user}
             content={post.content}
             contentImg={post.contentImg}
             canDelete={post.id_user === user.id}
@@ -47,7 +48,7 @@ export const Feed = () => {
     ));
 };
 
-export const Post = ({ id, avatar, username, content, contentImg, canDelete, rerender }) => {
+export const Post = ({ id, avatar, username, authorId, content, contentImg, canDelete, rerender }) => {
     const { user } = useContext(UserContext);
 
     const handleDelete = () => {
@@ -74,7 +75,7 @@ export const Post = ({ id, avatar, username, content, contentImg, canDelete, rer
             <div className="post-top">
                 <img src={avatar} alt="user profile" className="profil-img" />
                 <div className="content">
-                    <Link className="content-title" to={username}>
+                    <Link className="content-title" to={`/profil/${authorId}`}>
                         {username}
                     </Link>
                     <p className="content-text">{content}</p>

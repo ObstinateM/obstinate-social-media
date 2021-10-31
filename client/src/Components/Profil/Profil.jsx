@@ -84,6 +84,7 @@ export const UserFeed = () => {
                     id={post.id}
                     avatar={post.avatar}
                     username={post.author}
+                    authorId={post.id_user}
                     content={post.content}
                     contentImg={post.contentImg}
                     canDelete={post.id_user === user.id}
