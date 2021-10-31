@@ -1,0 +1,30 @@
+.profil-header {
+    display: flex;
+    flex-direction: column;
+    min-width: 25rem;
+    max-width: 35rem;
+    border: 4px solid var(--main-blue);
+    padding: 1rem 1rem;
+    margin-bottom: 2rem;
+    min-width: 27rem;
+}
+
+.profil-info {
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    margin-bottom: 0.5rem;
+}
+
+.profil-info h1 {
+    align-self: center;
+}
+
+.profil-bio {
+    font-size: 0.75rem;
+    margin: 0 2rem;
+}
+
+.profil-img-align {
+    align-self: center;
+}

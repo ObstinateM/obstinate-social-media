@@ -47,7 +47,7 @@ export const Feed = () => {
     ));
 };
 
-const Post = ({ id, avatar, username, content, contentImg, canDelete, rerender }) => {
+export const Post = ({ id, avatar, username, content, contentImg, canDelete, rerender }) => {
     const { user } = useContext(UserContext);
 
     const handleDelete = () => {

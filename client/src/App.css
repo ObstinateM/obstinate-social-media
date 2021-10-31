@@ -3,7 +3,6 @@ main {
     flex-wrap: wrap;
     flex-grow: 1;
     flex-shrink: 1;
-    justify-content: space-evenly;
     padding: 4em 4em;
 }
 

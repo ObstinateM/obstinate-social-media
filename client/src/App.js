@@ -5,6 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { Feed } from './Components/Posts/Posts';
 import { CreatePost } from 'Components/Posts/CreatePost';
 import { Register, Login } from './Components/Auth/Auth';
+import { UserFeed } from './Components/Profil/Profil';
 import GuardedRoute from 'Components/GuaredRoute/GuaredRoute';
 import { useModal } from 'Hook/useModal';
 import './App.css';
@@ -97,21 +98,26 @@ export function App() {
             <CreatePost isShowing={isShowing} toggle={toggle} />
             <Router forceRefresh={true}>
                 <Navbar>
-                    <NavTitle icon="images/work-in-progress.png" title="Twitter V2" />
+                    <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Twitter V2" />
                     <UserInfo picture={user.avatar} name={user.name} />
                     <NavSection sectionName="MAIN NAVIGATION">
-                        <NavItem icon="images/dashboard.png" title="Home" href="/" />
-                        <NavItem icon="images/settings.png" title="Profil" href="/profil" />
-                        <NavItem icon="images/settings.png" title="Settings" href="/admin" />
-                        <NavItem icon="images/logout.png" title="Logout" click={logout} />
+                        <NavItem icon="http://localhost:3000/images/dashboard.png" title="Home" href="/" />
+                        <NavItem
+                            icon="http://localhost:3000/images/settings.png"
+                            title="My Profil"
+                            href={`/profil/${user.id}`}
+                        />
+                        <NavItem icon="http://localhost:3000/images/settings.png" title="Settings" href="/admin" />
+                        <NavItem icon="http://localhost:3000/images/logout.png" title="Logout" click={logout} />
                     </NavSection>
                 </Navbar>
                 <main>
                     <button className="create-button" onClick={toggle}>
-                        <img src="images/writing.png" alt="Create new" />
+                        <img src="http://localhost:3000/images/writing.png" alt="Create new" />
                     </button>
                     <Switch>
                         <Route path="/" exact component={Feed} />
+                        <Route path="/profil/:id" component={UserFeed} />
                         <GuardedRoute path="/admin" canAccess={false} component={() => <h1>Admin</h1>} />
                         <Route path="/" component={() => <h1>404 Error</h1>} />
                     </Switch>

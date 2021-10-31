@@ -42,7 +42,7 @@ export const CreatePost = ({ isShowing, toggle }) => {
             <div className="modal">
                 <div className="input_post">
                     <button className="close-button" onClick={toggle}>
-                        <img src="images/cancel.png" alt="Close" />
+                        <img src="http://localhost:3000/images/cancel.png" alt="Close" />
                     </button>
                     <form onSubmit={handleSubmit}>
                         <h1>Create a post</h1>
