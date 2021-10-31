@@ -21,16 +21,34 @@ const refresh = (req, res) => {
     isRefreshTokenInDB(refreshToken, (exist, err) => {
         if (err) {
             logRefresh('Failed: database error');
-            return res.status(500).json({ message: 'Internal Server Error' });
+            return res
+                .status(500)
+                .cookie('refreshToken', '', {
+                    httpOnly: true,
+                    maxAge: 0
+                })
+                .json({ message: 'Internal Server Error' });
         }
         if (!exist) {
             logRefresh('Rejected: Refresh token is not valid');
-            return res.status(403).json({ message: 'Refresh token is not valid.' });
+            return res
+                .status(403)
+                .cookie('refreshToken', '', {
+                    httpOnly: true,
+                    maxAge: 0
+                })
+                .json({ message: 'Refresh token is not valid.' });
         }
         jwt.verify(refreshToken, process.env.SERVER_REFRESH_TOKEN_SECRET, { algorithm: ['HS256'] }, (err, user) => {
             if (err) {
                 logRefresh(`Rejected: Token is invalid: %O`, err);
-                return res.status(StatusCodes.NOT_ACCEPTABLE).json({ message: 'Token is invalid' });
+                return res
+                    .status(StatusCodes.NOT_ACCEPTABLE)
+                    .cookie('refreshToken', '', {
+                        httpOnly: true,
+                        maxAge: 0
+                    })
+                    .json({ message: 'Token is invalid' });
             } else {
                 deleteRefreshToken(refreshToken, result => {
                     if (result.isValid) {
@@ -62,7 +80,13 @@ const refresh = (req, res) => {
                         });
                     } else {
                         logRefresh('Rejected: Token not found/deleted in database');
-                        return res.status(500).json({ message: 'Token is invalid.' });
+                        return res
+                            .status(500)
+                            .cookie('refreshToken', '', {
+                                httpOnly: true,
+                                maxAge: 0
+                            })
+                            .json({ message: 'Token is invalid.' });
                     }
                 });
             }
