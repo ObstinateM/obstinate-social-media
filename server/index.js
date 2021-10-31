@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const logServer = require('debug')('server');
 
 // Routes import
 const { authRouter } = require('./routes/auth.routes');
@@ -31,5 +32,5 @@ app.use('/api/public/user/', userRouter);
 
 // Server Start
 app.listen(process.env.PORT || 3001, () => {
-    console.log('Server started...');
+    logServer(`Server started. Available at http://localhost:${process.env.PORT || 3001}/`);
 });

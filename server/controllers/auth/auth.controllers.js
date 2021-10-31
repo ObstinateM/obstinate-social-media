@@ -1,14 +1,11 @@
 const { StatusCodes } = require('http-status-codes');
 const { Connect, Query } = require('../../utils/db');
+const log = require('debug')('auth');
 
 const validateToken = (req, res) => {
-    if (res.locals.jwt.name === 'test') {
-        res.status(StatusCodes.ACCEPTED).json({ message: "GG t'es test" });
-    } else {
-        res.status(StatusCodes.ACCEPTED).json({
-            message: 'Token accepted'
-        });
-    }
+    res.status(StatusCodes.ACCEPTED).json({
+        message: 'Token accepted'
+    });
 };
 
 const getAllUsers = (req, res) => {
