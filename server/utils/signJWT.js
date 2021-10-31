@@ -4,9 +4,10 @@ const jwt = require('jsonwebtoken');
 const log = require('debug')('JWT');
 const logAccessToken = log.extend('accessToken');
 const logRefreshToken = log.extend('refreshToken');
+const logRefreshTokenPlus = log.extend('refreshToken:+');
 
 const generateAccessToken = user => {
-    logAccessToken(`Generating a new access token for ${user.id} : ${user.name}`);
+    logAccessToken(`Generating a new access token for ${user.id}:${user.name}`);
     return jwt.sign(
         {
             id: user.id,
@@ -25,7 +26,7 @@ const generateAccessToken = user => {
 };
 
 const generateRefreshToken = user => {
-    logRefreshToken(`Generating a new refresh token for ${user.id} : ${user.name}`);
+    logRefreshToken(`Generating a new refresh token for ${user.id}:${user.name}`);
     return jwt.sign(
         {
             id: user.id,
@@ -44,16 +45,16 @@ const generateRefreshToken = user => {
 };
 
 const addRefreshTokentoDB = (token, callback) => {
-    logRefreshToken('Adding a new refresh token to DB');
+    logRefreshTokenPlus('Adding a new refresh token to DB');
     Connect()
         .then(connection => {
             Query(connection, `INSERT INTO refreshToken(refreshToken) VALUES('${token}')`)
                 .then(_ => {
-                    logRefreshToken('Token successfully added to DB');
+                    logRefreshTokenPlus('Token successfully added to DB');
                     callback();
                 })
                 .catch(err => {
-                    logRefreshToken('Failed to store the refresh token : %O', err);
+                    logRefreshTokenPlus('Failed to store the refresh token : %O', err);
                     callback();
                 });
         })
@@ -61,33 +62,33 @@ const addRefreshTokentoDB = (token, callback) => {
 };
 
 const isRefreshTokenInDB = (token, callback) => {
-    logRefreshToken('Checking if refresh token is in DB');
+    logRefreshTokenPlus('Checking if refresh token is in DB');
     Connect()
         .then(connection => {
             Query(connection, `SELECT COUNT(*) as exist FROM refreshToken WHERE refreshToken = '${token}'`)
                 .then(result => {
-                    logRefreshToken('Refresh token is in DB');
+                    logRefreshTokenPlus('Refresh token is in DB');
                     callback(result[0].exist, null);
                 })
                 .catch(err => {
                     callback(null, err);
-                    logRefreshToken('Refresh token is not in DB');
+                    logRefreshTokenPlus('Refresh token is not in DB');
                 });
         })
         .catch(err => callback(null, err));
 };
 
 const deleteRefreshToken = (token, callback) => {
-    logRefreshToken('Deleting a refresh token');
+    logRefreshTokenPlus('Deleting a refresh token');
     Connect()
         .then(connection => {
             Query(connection, `DELETE FROM refreshToken WHERE refreshToken = '${token}'`)
                 .then(_ => {
-                    logRefreshToken('Refresh token successfully deleted');
+                    logRefreshTokenPlus('Refresh token successfully deleted');
                     callback({ isValid: true, err: null });
                 })
                 .catch(err => {
-                    logRefreshToken('Refresh token delete failed');
+                    logRefreshTokenPlus('Refresh token delete failed');
                     callback({ isValid: false, err });
                 });
         })

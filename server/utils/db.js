@@ -49,9 +49,4 @@ const Query = async (connection, query) => {
     });
 };
 
-// const database = createConnection(option);
-// database.connect(err => {
-//     if (err) console.log(err);
-// });
-
 module.exports = { Connect, Query };

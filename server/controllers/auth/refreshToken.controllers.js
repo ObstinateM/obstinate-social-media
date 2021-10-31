@@ -10,7 +10,7 @@ const jwt = require('jsonwebtoken');
 const logRefresh = require('debug')('auth:refreshToken');
 
 const refresh = (req, res) => {
-    logRefresh('User is refreshing is token');
+    logRefresh('User is refreshing his token');
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {

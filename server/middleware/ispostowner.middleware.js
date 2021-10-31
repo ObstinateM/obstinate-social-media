@@ -13,7 +13,7 @@ const isPostOwner = (req, res, next) => {
             Query(connection, query)
                 .then(result => {
                     if (result[0].id_user === user.id) {
-                        logIsOwner(`${user.id} : ${user.name} is the author of the post (${post_id}`);
+                        logIsOwner(`${user.id}:${user.name} is the author of the post (${post_id}`);
                         next();
                     } else {
                         logIsOwner(`Rejected: ${user.id} : ${user.name} is not the author of the post (${post_id}`);
