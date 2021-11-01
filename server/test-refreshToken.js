@@ -22,7 +22,7 @@ const manualRefreshToken = () => {
         {
             issuer: process.env.SERVER_TOKEN_ISSUER,
             algorithm: 'HS256',
-            expiresIn: '15s'
+            expiresIn: '2h'
         }
     );
     addRefreshTokentoDB(token, () => {

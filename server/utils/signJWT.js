@@ -39,7 +39,7 @@ const generateRefreshToken = user => {
         {
             issuer: process.env.SERVER_TOKEN_ISSUER,
             algorithm: 'HS256',
-            expiresIn: '7d'
+            expiresIn: '30d'
         }
     );
 };

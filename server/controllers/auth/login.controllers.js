@@ -27,7 +27,7 @@ const login = (req, res) => {
                                 );
                                 res.cookie('refreshToken', refreshToken, {
                                     httpOnly: true,
-                                    expires: new Date(Date.now() + 7 * 24 * 3600000) // Cookie removed after 24 hours
+                                    expires: new Date(Date.now() + 30 * 24 * 59 * 60 * 1000) // Cookie removed after 24 hours
                                 });
                                 res.status(StatusCodes.ACCEPTED).json({
                                     id: users[0].id,
@@ -35,8 +35,7 @@ const login = (req, res) => {
                                     email: users[0].email,
                                     avatar: users[0].avatar,
                                     bio: users[0].bio,
-                                    accessToken,
-                                    refreshToken
+                                    accessToken
                                 });
                             });
                         } else {
