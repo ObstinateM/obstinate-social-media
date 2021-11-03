@@ -6,7 +6,7 @@ const logAccessToken = log.extend('accessToken');
 const logRefreshToken = log.extend('refreshToken');
 const logRefreshTokenPlus = log.extend('refreshToken:+');
 
-const generateAccessToken = user => {
+const generateAccessToken = (user, time = '15m') => {
     logAccessToken(`Generating a new access token for ${user.id}:${user.name}`);
     return jwt.sign(
         {
@@ -20,7 +20,7 @@ const generateAccessToken = user => {
         {
             issuer: process.env.SERVER_TOKEN_ISSUER,
             algorithm: 'HS256',
-            expiresIn: '15m'
+            expiresIn: time
         }
     );
 };

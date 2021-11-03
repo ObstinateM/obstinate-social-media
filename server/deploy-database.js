@@ -18,7 +18,9 @@ const database = mysql.createConnection(option);
 const request = [
     'CREATE TABLE users(id INT PRIMARY KEY, name VARCHAR(25) NOT NULL, email VARCHAR(50) NOT NULL, password VARCHAR(50) NOT NULL, avatar TEXT, bio VARCHAR(255));',
     'CREATE TABLE refreshToken(INT PRIMARY KEY, refreshToken VARCHAR(255));',
-    'CREATE TABLE posts(id INT PRIMARY KEY, id_user INT, content TEXT, image TEXT, FOREIGN KEY (id_user) REFERENCES users(id))'
+    'CREATE TABLE posts(id INT PRIMARY KEY, id_user INT, content TEXT, image TEXT, FOREIGN KEY (id_user) REFERENCES users(id))',
+    'CREATE TABLE comments(id INT PRIMARY KEY, user_id INT, post_id INT,content TEXT, FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (post_id) REFERENCES posts(id))',
+    'CREATE TABLE like(id INY PRIMARY KEY AUTO INCREMENT, post_liked INT, FOREIGN KEY (post_liked) REFERENCES posts(id))'
 ];
 
 request.forEach(element =>

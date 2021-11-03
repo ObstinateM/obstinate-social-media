@@ -7,11 +7,13 @@ const app = express();
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
 const logServer = require('debug')('server');
+const extractJWT = require('./middleware/extractJWT.middleware');
 
 // Routes import
 const { authRouter } = require('./routes/auth.routes');
-const { postsRouter } = require('./routes/posts.routes');
 const { userRouter } = require('./routes/user.routes');
+const { postsRouter } = require('./routes/posts.routes');
+const { commentsRouter } = require('./routes/comments.routes');
 
 //middleware
 app.use(
@@ -26,9 +28,13 @@ app.use(helmet());
 app.use(cookieParser());
 
 // Routes
+// Public routes
 app.use('/api/auth/', authRouter);
-app.use('/api/private/posts/', postsRouter);
 app.use('/api/public/user/', userRouter);
+
+// Private routes
+app.use('/api/private/posts/', extractJWT, postsRouter);
+app.use('/api/private/comments/', extractJWT, commentsRouter);
 
 // Server Start
 app.listen(process.env.PORT || 3001, () => {

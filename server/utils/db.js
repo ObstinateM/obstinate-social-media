@@ -49,4 +49,20 @@ const Query = async (connection, query) => {
     });
 };
 
-module.exports = { Connect, Query };
+const safeQuery = async (connection, query, values) => {
+    logQuery('Trying to query %o', query);
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error, result) => {
+            if (error) {
+                logQuery('ERROR: %s', error);
+                reject(error);
+                return;
+            }
+            logQuery('Successfully queried "%O"', result);
+            resolve(result);
+            connection.end();
+        });
+    });
+};
+
+module.exports = { Connect, Query, safeQuery };

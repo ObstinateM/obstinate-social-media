@@ -7,15 +7,14 @@ const getuserpost = require('../controllers/private/posts/getuserpost.controller
 const deletePost = require('../controllers/private/posts/delete.controllers');
 
 // Middleware
-const extractJWT = require('../middleware/extractJWT.middleware');
 const isPostOwner = require('../middleware/ispostowner.middleware');
 
 const router = Router();
 
-router.post('/createpost', extractJWT, createpost);
-router.post('/getuser', extractJWT, getuserpost);
-router.get('/getallposts', extractJWT, getAllPosts);
-router.delete('/delete', extractJWT, isPostOwner, deletePost);
+router.post('/createpost', createpost);
+router.post('/getuser', getuserpost);
+router.get('/getallposts', getAllPosts);
+router.delete('/delete', isPostOwner, deletePost);
 
 module.exports = {
     postsRouter: router
