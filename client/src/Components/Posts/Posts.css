@@ -58,6 +58,21 @@ main {
 
 .action a {
     margin: 0 1rem;
+    height: 1rem;
+}
+
+.action img,
+.action a,
+.action button {
+    margin: 0;
+    padding: 0;
+}
+
+.action img,
+.action a {
+    width: 1.5rem;
+    height: auto;
+    margin-right: 1rem;
 }
 
 .post button {

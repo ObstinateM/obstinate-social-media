@@ -28,3 +28,8 @@
 .profil-img-align {
     align-self: center;
 }
+
+.profil-img-align img {
+    height: 96px;
+    width: 96px;
+}

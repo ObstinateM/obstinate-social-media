@@ -10,7 +10,7 @@ import { UserContext } from 'Context/UserContext';
 // CSS
 import './CreatePosts.css';
 
-export const CreatePost = ({ isShowing, toggle }) => {
+export function CreatePost({ isShowing, toggle }) {
     const content = useRef(null);
     const [error, setError] = useState(null);
     const { user } = useContext(UserContext);
@@ -63,4 +63,4 @@ export const CreatePost = ({ isShowing, toggle }) => {
         </div>,
         document.body
     );
-};
+}

@@ -45,16 +45,16 @@ export function Navbar() {
     );
 }
 
-export const NavTitle = ({ icon, title }) => {
+function NavTitle({ icon, title }) {
     return (
         <div className="title">
             <img src={icon} alt="WIP Logo" />
             <h1>{title}</h1>
         </div>
     );
-};
+}
 
-export const UserInfo = ({ picture, name }) => {
+function UserInfo({ picture, name }) {
     return (
         <>
             <div className="user-info">
@@ -63,9 +63,9 @@ export const UserInfo = ({ picture, name }) => {
             </div>
         </>
     );
-};
+}
 
-export const NavSection = ({ sectionName, children }) => {
+function NavSection({ sectionName, children }) {
     return (
         <div className="nav-link">
             <div className="nav-title">
@@ -74,9 +74,9 @@ export const NavSection = ({ sectionName, children }) => {
             {children}
         </div>
     );
-};
+}
 
-export const NavItem = ({ icon, alt, title, href = '#', click = null }) => {
+function NavItem({ icon, alt, title, href = '#', click = null }) {
     const { pathname } = useLocation();
 
     return (
@@ -87,4 +87,4 @@ export const NavItem = ({ icon, alt, title, href = '#', click = null }) => {
             </Link>
         </div>
     );
-};
+}

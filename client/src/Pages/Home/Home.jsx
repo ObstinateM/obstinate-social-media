@@ -1,4 +1,4 @@
-// React & Axios
+// React
 import React from 'react';
 
 // Hooks
