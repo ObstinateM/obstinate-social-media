@@ -1,12 +1,13 @@
 const { StatusCodes } = require('http-status-codes');
-const { Connect, Query } = require('../../../utils/db');
+const { Connect, safeQuery } = require('../../../utils/db');
 
 const getAllPosts = (req, res) => {
     let query =
-        'SELECT posts.*, users.name as author, users.avatar as avatar FROM posts JOIN users ON users.id = posts.id_user ORDER BY posts.id DESC LIMIT 30';
+        'SELECT posts.*, users.name as author, users.avatar as avatar, (SELECT COUNT(*) FROM post_like WHERE post_id = posts.id) AS nbLikes, (SELECT COUNT(*) FROM post_like WHERE post_id = posts.id AND user_id = ?) as isLiked FROM posts LEFT JOIN users ON id_user = users.id ORDER BY posts.id DESC LIMIT 30;';
+    let values = [res.locals.jwt.id];
     Connect()
         .then(connection => {
-            Query(connection, query)
+            safeQuery(connection, query, values)
                 .then(result => {
                     res.status(StatusCodes.CREATED).json({ message: 'Ok.', posts: result });
                 })

@@ -1,10 +1,49 @@
-import React from 'react';
+// React & Axios
+import React, { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { UserContext } from 'Context/UserContext';
+
+// CSS
 import './Navbar.css';
 
-export const Navbar = ({ children }) => {
-    return <nav>{children}</nav>;
-};
+export function Navbar() {
+    const { user, setUser, setIsLoggedIn } = useContext(UserContext);
+
+    const logout = () => {
+        axios({
+            method: 'GET',
+            url: 'http://localhost:3001/api/auth/logout',
+            withCredentials: true
+        })
+            .then(res => {
+                toast.success(res.data.message);
+                setIsLoggedIn(false);
+                setUser({});
+            })
+            .catch(_ => {
+                toast.error('Please retry to logout.');
+            });
+    };
+
+    return (
+        <nav>
+            <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Twitter V2" />
+            <UserInfo picture={user.avatar} name={user.name} />
+            <NavSection sectionName="MAIN NAVIGATION">
+                <NavItem icon="http://localhost:3000/images/dashboard.png" title="Home" href="/" />
+                <NavItem
+                    icon="http://localhost:3000/images/settings.png"
+                    title="My Profil"
+                    href={`/profil/${user.id}`}
+                />
+                <NavItem icon="http://localhost:3000/images/settings.png" title="Settings" href="/admin" />
+                <NavItem icon="http://localhost:3000/images/logout.png" title="Logout" click={logout} />
+            </NavSection>
+        </nav>
+    );
+}
 
 export const NavTitle = ({ icon, title }) => {
     return (

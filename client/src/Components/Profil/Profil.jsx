@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { Post } from '../Posts/Posts';
-import { UserContext } from 'App';
+import { UserContext } from 'Context/UserContext';
 import '../Posts/Posts.css';
 import './Profil.css';
 

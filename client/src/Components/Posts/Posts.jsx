@@ -1,55 +1,16 @@
-import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
+// React & Axios
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from 'App';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
+// Context
+import { UserContext } from 'Context/UserContext';
+
+// CSS
 import './Posts.css';
 
-export const Feed = () => {
-    const [posts, setPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const { user } = useContext(UserContext);
-    const [handleRerender, setHandleRerender] = useState(false);
-
-    const rerender = () => {
-        setHandleRerender(!handleRerender);
-    };
-
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: 'http://localhost:3001/api/private/posts/getallposts',
-            headers: { Authorization: `Bearer ${user.accessToken}` }
-        })
-            .then(res => {
-                setPosts(res.data.posts);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.log(err.response);
-                setIsLoading(false);
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [handleRerender]);
-
-    if (isLoading) return <h1>Loading posts...</h1>;
-
-    return posts.map(post => (
-        <Post
-            key={post.id}
-            id={post.id}
-            avatar={post.avatar}
-            username={post.author}
-            authorId={post.id_user}
-            content={post.content}
-            contentImg={post.contentImg}
-            canDelete={post.id_user === user.id}
-            rerender={rerender}
-        />
-    ));
-};
-
-export const Post = ({ id, avatar, username, authorId, content, contentImg, canDelete, rerender }) => {
+export function Post({ id, avatar, username, authorId, content, contentImg, canDelete, rerender }) {
     const { user } = useContext(UserContext);
 
     const handleDelete = () => {
@@ -84,11 +45,21 @@ export const Post = ({ id, avatar, username, authorId, content, contentImg, canD
                 </div>
             </div>
             <div className="action">
-                {canDelete ? <button onClick={handleDelete}>Delete</button> : null}
-                <button>Like</button>
-                <button>Comments</button>
-                <button>Share</button>
+                {canDelete ? (
+                    <button onClick={handleDelete}>
+                        <img src="http://localhost:3000/images/bin.png" alt="Delete" />
+                    </button>
+                ) : null}
+                <button>
+                    <img src="http://localhost:3000/images/heart-outline.png" alt="Like" />
+                </button>
+                <Link to={`/post/${id}`}>
+                    <img src="http://localhost:3000/images/chat.png" alt="Comment" />
+                </Link>
+                <button>
+                    <img src="http://localhost:3000/images/share.png" alt="Share" />
+                </button>
             </div>
         </div>
     );
-};
+}
