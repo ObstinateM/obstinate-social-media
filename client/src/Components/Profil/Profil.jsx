@@ -1,12 +1,19 @@
-import axios from 'axios';
+// React & Axios
 import { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
+import axios from 'axios';
+
+// Components
 import { Post } from '../Posts/Posts';
-import { UserContext } from 'App';
+
+// Context
+import { UserContext } from 'Context/UserContext';
+
+// CSS
 import '../Posts/Posts.css';
 import './Profil.css';
 
-export const UserFeed = () => {
+export function UserFeed() {
     const [posts, setPosts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(UserContext);
@@ -30,16 +37,13 @@ export const UserFeed = () => {
             })
         })
             .then(res => {
-                console.log('PASSED THEN');
                 console.log(res.data.user);
                 setUserProfil(res.data.user);
             })
             .catch(err => {
-                console.log('PASSED CATCH');
                 console.log(err.response);
             })
             .finally(() => {
-                console.log('PASSED FINALLY');
                 axios({
                     method: 'POST',
                     url: 'http://localhost:3001/api/private/posts/getuser/',
@@ -79,18 +83,8 @@ export const UserFeed = () => {
                 </div>
             </div>
             {posts.map(post => (
-                <Post
-                    key={post.id}
-                    id={post.id}
-                    avatar={post.avatar}
-                    username={post.author}
-                    authorId={post.id_user}
-                    content={post.content}
-                    contentImg={post.contentImg}
-                    canDelete={post.id_user === user.id}
-                    rerender={rerender}
-                />
+                <Post key={post.id} post={post} canDelete={post.id_user === user.id} rerender={rerender} />
             ))}
         </>
     );
-};
+}

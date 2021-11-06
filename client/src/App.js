@@ -1,42 +1,30 @@
-import React, { useState, useMemo, createContext, useEffect } from 'react';
+// React & Axios
+import React, { useState, useMemo, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { Navbar, NavTitle, UserInfo, NavItem, NavSection } from 'Components/Navbar/Navbar';
-import toast, { Toaster } from 'react-hot-toast';
-import { Feed } from './Components/Posts/Posts';
-import { CreatePost } from 'Components/Posts/CreatePost';
-import { Register, Login } from './Components/Auth/Auth';
-import { UserFeed } from './Components/Profil/Profil';
-import GuardedRoute from 'Components/GuaredRoute/GuaredRoute';
-import { useModal } from 'Hook/useModal';
-import './App.css';
 import axios from 'axios';
 
-export const UserContext = createContext({
-    isLoggedIn: false,
-    user: {}
-});
+// Components
+import { Toaster } from 'react-hot-toast';
+import { Register } from 'Components/Auth/Register';
+import { Login } from 'Components/Auth/Login';
+import { Navbar } from 'Components/Navbar/Navbar';
+import GuardedRoute from 'Components/GuaredRoute/GuaredRoute';
+
+// Pages
+import { HomePage } from 'Pages/Home/Home';
+import { CommentPage } from 'Pages/Comment/Comment';
+import { ProfilPage } from 'Pages/Profil/Profil';
+
+// Context
+import { UserContext } from 'Context/UserContext';
+
+// CSS
+import './App.css';
 
 export function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const { isShowing, toggle } = useModal();
-
-    const logout = () => {
-        axios({
-            method: 'GET',
-            url: 'http://localhost:3001/api/auth/logout',
-            withCredentials: true
-        })
-            .then(res => {
-                toast.success(res.data.message);
-                setIsLoggedIn(false);
-                setUser({});
-            })
-            .catch(_ => {
-                toast.error('Please retry to logout.');
-            });
-    };
 
     const refreshToken = () => {
         axios({
@@ -97,28 +85,12 @@ export function App() {
         <UserContext.Provider value={value}>
             <Toaster />
             <Router forceRefresh={true}>
-                <CreatePost isShowing={isShowing} toggle={toggle} />
-                <Navbar>
-                    <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Twitter V2" />
-                    <UserInfo picture={user.avatar} name={user.name} />
-                    <NavSection sectionName="MAIN NAVIGATION">
-                        <NavItem icon="http://localhost:3000/images/dashboard.png" title="Home" href="/" />
-                        <NavItem
-                            icon="http://localhost:3000/images/settings.png"
-                            title="My Profil"
-                            href={`/profil/${user.id}`}
-                        />
-                        <NavItem icon="http://localhost:3000/images/settings.png" title="Settings" href="/admin" />
-                        <NavItem icon="http://localhost:3000/images/logout.png" title="Logout" click={logout} />
-                    </NavSection>
-                </Navbar>
+                <Navbar />
                 <main>
-                    <button className="create-button" onClick={toggle}>
-                        <img src="http://localhost:3000/images/writing.png" alt="Create new" />
-                    </button>
                     <Switch>
-                        <Route path="/" exact component={Feed} />
-                        <Route path="/profil/:id" component={UserFeed} />
+                        <Route path="/" exact component={HomePage} />
+                        <Route path="/profil/:id" component={ProfilPage} />
+                        <Route path="/post/:id" component={CommentPage} />
                         <GuardedRoute path="/admin" canAccess={false} component={() => <h1>Admin</h1>} />
                         <Route path="/" component={() => <h1>404 Error</h1>} />
                     </Switch>

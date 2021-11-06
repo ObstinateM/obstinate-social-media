@@ -1,65 +1,27 @@
-import axios from 'axios';
-import { useState, useEffect, useContext } from 'react';
+// React & Axios
+import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { UserContext } from 'App';
 import toast from 'react-hot-toast';
+import axios from 'axios';
+
+// Context
+import { UserContext } from 'Context/UserContext';
+
+// CSS
 import './Posts.css';
 
-export const Feed = () => {
-    const [posts, setPosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const { user } = useContext(UserContext);
-    const [handleRerender, setHandleRerender] = useState(false);
-
-    const rerender = () => {
-        setHandleRerender(!handleRerender);
-    };
-
-    useEffect(() => {
-        axios({
-            method: 'GET',
-            url: 'http://localhost:3001/api/private/posts/getallposts',
-            headers: { Authorization: `Bearer ${user.accessToken}` }
-        })
-            .then(res => {
-                setPosts(res.data.posts);
-                setIsLoading(false);
-            })
-            .catch(err => {
-                console.log(err.response);
-                setIsLoading(false);
-            });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [handleRerender]);
-
-    if (isLoading) return <h1>Loading posts...</h1>;
-
-    return posts.map(post => (
-        <Post
-            key={post.id}
-            id={post.id}
-            avatar={post.avatar}
-            username={post.author}
-            authorId={post.id_user}
-            content={post.content}
-            contentImg={post.contentImg}
-            canDelete={post.id_user === user.id}
-            rerender={rerender}
-        />
-    ));
-};
-
-export const Post = ({ id, avatar, username, authorId, content, contentImg, canDelete, rerender }) => {
+export function Post({ post, canDelete, rerender, highlight = false }) {
     const { user } = useContext(UserContext);
 
-    const handleDelete = () => {
-        console.log(id);
+    // TODO: Handle Like and Unlike
+    function handleDelete() {
+        console.log(post.id);
         axios({
             method: 'DELETE',
             url: 'http://localhost:3001/api/private/posts/delete',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
             data: JSON.stringify({
-                post_id: id
+                post_id: post.id
             })
         })
             .then(_ => {
@@ -69,26 +31,56 @@ export const Post = ({ id, avatar, username, authorId, content, contentImg, canD
             .catch(_ => {
                 toast.error('Cant delete this post');
             });
-    };
+    }
+
+    function handleShare() {
+        navigator.clipboard.writeText(`http://localhost:3000/post/${post.id}`).then(
+            () => {
+                toast('Link copied to clipboard.', { duration: 3000, icon: 'ℹ️' });
+            },
+            _ => {
+                toast.error('Unable to copy the link.');
+            }
+        );
+    }
 
     return (
-        <div className="post">
+        <div className={highlight ? 'post highlight' : 'post'}>
             <div className="post-top">
-                <img src={avatar} alt="user profile" className="profil-img" />
+                <img src={post.avatar} alt="user profile" className="profil-img" />
                 <div className="content">
-                    <Link className="content-title" to={`/profil/${authorId}`}>
-                        {username}
+                    <Link className="content-title" to={`/profil/${post.id_user}`}>
+                        {post.author}
                     </Link>
-                    <p className="content-text">{content}</p>
-                    {contentImg && <img src={contentImg} alt="" className="post-img" />}
+                    <p className="content-text">{post.content}</p>
+                    {post.contentImg && <img src={post.contentImg} alt="" className="post-img" />}
                 </div>
             </div>
             <div className="action">
-                {canDelete ? <button onClick={handleDelete}>Delete</button> : null}
-                <button>Like</button>
-                <button>Comments</button>
-                <button>Share</button>
+                <div className="nbLikes">
+                    <p>{post.nbLikes} J'aime</p>
+                </div>
+                {canDelete ? (
+                    <button onClick={handleDelete}>
+                        <img src="http://localhost:3000/images/bin.png" alt="Delete" />
+                    </button>
+                ) : null}
+                {post.isLiked ? (
+                    <button>
+                        <img src="http://localhost:3000/images/heart-filled.png" alt="Like" />
+                    </button>
+                ) : (
+                    <button>
+                        <img src="http://localhost:3000/images/heart-outline.png" alt="Like" />
+                    </button>
+                )}
+                <Link to={`/post/${post.id}`}>
+                    <img src="http://localhost:3000/images/chat.png" alt="Comment" />
+                </Link>
+                <button onClick={handleShare}>
+                    <img src="http://localhost:3000/images/share.png" alt="Share" />
+                </button>
             </div>
         </div>
     );
-};
+}

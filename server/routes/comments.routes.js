@@ -11,7 +11,7 @@ const isCommentOwner = require('../middleware/isCommentOwner.middleware');
 const router = Router();
 
 router.post('/create', create);
-router.get('/getall', getall);
+router.post('/getall', getall);
 router.delete('/delete', isCommentOwner, deleteComment);
 
 module.exports = {

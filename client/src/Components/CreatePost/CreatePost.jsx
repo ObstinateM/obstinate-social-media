@@ -1,11 +1,16 @@
+// React & Axios
 import { useRef, useState, useContext } from 'react';
 import { createPortal } from 'react-dom';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import './CreatePosts.css';
-import { UserContext } from 'App';
 
-export const CreatePost = ({ isShowing, toggle }) => {
+// Context
+import { UserContext } from 'Context/UserContext';
+
+// CSS
+import './CreatePosts.css';
+
+export function CreatePost({ isShowing, toggle }) {
     const content = useRef(null);
     const [error, setError] = useState(null);
     const { user } = useContext(UserContext);
@@ -58,4 +63,4 @@ export const CreatePost = ({ isShowing, toggle }) => {
         </div>,
         document.body
     );
-};
+}
