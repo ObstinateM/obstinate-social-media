@@ -34,8 +34,6 @@ export function App() {
         })
             .then(res => {
                 if (res.status === 202) {
-                    // Login + Redirect
-                    console.log(res.data);
                     setUser(res.data);
                     setIsLoggedIn(true);
                     setTimeout(() => {

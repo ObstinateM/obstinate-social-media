@@ -33,6 +33,21 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
             });
     }
 
+    function handleLike() {
+        axios({
+            method: 'POST',
+            url: 'http://localhost:3001/api/private/posts/like',
+            headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
+            data: JSON.stringify({
+                post_id: post.id
+            })
+        })
+            .then(() => rerender())
+            .catch(() => {
+                toast.error('An error has occured. Please retry');
+            });
+    }
+
     function handleShare() {
         navigator.clipboard.writeText(`http://localhost:3000/post/${post.id}`).then(
             () => {
@@ -66,11 +81,11 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
                     </button>
                 ) : null}
                 {post.isLiked ? (
-                    <button>
+                    <button onClick={handleLike}>
                         <img src="http://localhost:3000/images/heart-filled.png" alt="Like" />
                     </button>
                 ) : (
-                    <button>
+                    <button onClick={handleLike}>
                         <img src="http://localhost:3000/images/heart-outline.png" alt="Like" />
                     </button>
                 )}
