@@ -4,10 +4,14 @@ import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 
+// Components
+import { Post } from 'Components/Posts/Posts';
+
 // Context
 import { UserContext } from 'Context/UserContext';
 
 export function CommentFeed() {
+    const [post, setPost] = useState([]);
     const [comments, setComments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const { user } = useContext(UserContext);
@@ -18,6 +22,7 @@ export function CommentFeed() {
         setHandleRerender(!handleRerender);
     };
 
+    // TODO: Add main post
     useEffect(() => {
         axios({
             method: 'POST',
@@ -31,8 +36,9 @@ export function CommentFeed() {
             })
         })
             .then(res => {
-                console.log(res.data);
-                setComments(res.data.comments);
+                console.log(res.data.comments);
+                setPost(res.data.comments[0]);
+                setComments(res.data.comments.slice(1));
                 setIsLoading(false);
             })
             .catch(err => {
@@ -43,32 +49,36 @@ export function CommentFeed() {
     }, [handleRerender]);
 
     if (isLoading) return <h1>Loading comments...</h1>;
-
-    return comments.map(comment => (
-        <Comment
-            key={comment.id}
-            id={comment.id}
-            avatar={comment.avatar}
-            username={comment.author}
-            authorId={comment.id_user}
-            content={comment.content}
-            canDelete={comment.id_user === user.id}
-            rerender={rerender}
-        />
-    ));
+    return (
+        <>
+            <Post post={post} canDelete={user.id === post.id_user} render={() => {}} highlight={true} />
+            {comments.length ? (
+                comments.map(comment => (
+                    <Comment
+                        key={comment.id}
+                        comment={comment}
+                        canDelete={comment.id_user === user.id}
+                        rerender={rerender}
+                    />
+                ))
+            ) : (
+                <h3>No comments yet...</h3>
+            )}
+        </>
+    );
 }
 
-function Comment({ id, avatar, username, authorId, content, canDelete, rerender }) {
+function Comment({ comment, canDelete, rerender }) {
     const { user } = useContext(UserContext);
 
     const handleDelete = () => {
-        console.log(id);
+        console.log(comment.id);
         axios({
             method: 'DELETE',
             url: 'http://localhost:3001/api/private/comments/delete',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
             data: JSON.stringify({
-                comment_id: id
+                comment_id: comment.id
             })
         })
             .then(_ => {
@@ -83,12 +93,12 @@ function Comment({ id, avatar, username, authorId, content, canDelete, rerender 
     return (
         <div className="post">
             <div className="post-top">
-                <img src={avatar} alt="user profile" className="profil-img" />
+                <img src={comment.avatar} alt="user profile" className="profil-img" />
                 <div className="content">
-                    <Link className="content-title" to={`/profil/${authorId}`}>
-                        {username}
+                    <Link className="content-title" to={`/profil/${comment.id_user}`}>
+                        {comment.author}
                     </Link>
-                    <p className="content-text">{content}</p>
+                    <p className="content-text">{comment.content}</p>
                 </div>
             </div>
             <div className="action">{canDelete ? <button onClick={handleDelete}>Delete</button> : null}</div>

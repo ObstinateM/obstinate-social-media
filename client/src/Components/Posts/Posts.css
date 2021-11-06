@@ -98,3 +98,14 @@ main {
 .post button:focus {
     outline: 0;
 }
+
+.nbLikes {
+    justify-self: flex-start;
+    margin: 0.3rem auto 0 1rem;
+    font-size: 0.9rem;
+}
+
+.highlight {
+    border: 3px solid var(--main-blue);
+    margin-bottom: 1rem;
+}

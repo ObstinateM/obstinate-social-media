@@ -83,17 +83,7 @@ export function UserFeed() {
                 </div>
             </div>
             {posts.map(post => (
-                <Post
-                    key={post.id}
-                    id={post.id}
-                    avatar={post.avatar}
-                    username={post.author}
-                    authorId={post.id_user}
-                    content={post.content}
-                    contentImg={post.contentImg}
-                    canDelete={post.id_user === user.id}
-                    rerender={rerender}
-                />
+                <Post key={post.id} post={post} canDelete={post.id_user === user.id} rerender={rerender} />
             ))}
         </>
     );

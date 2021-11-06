@@ -21,13 +21,7 @@ const refresh = (req, res) => {
     isRefreshTokenInDB(refreshToken, (exist, err) => {
         if (err) {
             logRefresh('Failed: database error');
-            return res
-                .status(500)
-                .cookie('refreshToken', '', {
-                    httpOnly: true,
-                    maxAge: 0
-                })
-                .json({ message: 'Internal Server Error' });
+            return res.status(500).json({ message: 'Internal Server Error' });
         } else if (exist) {
             logRefresh('Le token existe bien dans DB');
             /**
@@ -38,6 +32,7 @@ const refresh = (req, res) => {
              * Sinon on return juste un accesToken
              */
             // TODO: Add user_id with refresh token to be able to delete them by user id
+            // TODO : Add role to tokens
             jwt.verify(refreshToken, process.env.SERVER_REFRESH_TOKEN_SECRET, { algorithm: ['HS256'] }, (err, user) => {
                 if (err) {
                     logRefresh(`Failed: token invalid (${err.name})`);
