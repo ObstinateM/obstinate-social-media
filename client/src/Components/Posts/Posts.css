@@ -99,6 +99,31 @@ main {
     outline: 0;
 }
 
+.post textarea {
+    margin-right: 1rem;
+    margin-left: 1rem;
+    background-color: var(--bg-blue);
+    border: none;
+    min-width: 20rem;
+    overflow: auto;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    resize: none;
+}
+
+.comment-box {
+    position: relative;
+    height: 100%;
+}
+
+.comment-box button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
 .nbLikes {
     justify-self: flex-start;
     margin: 0.3rem auto 0 1rem;
@@ -108,4 +133,8 @@ main {
 .highlight {
     border: 3px solid var(--main-blue);
     margin-bottom: 1rem;
+}
+
+.no-comment {
+    margin-top: 1rem;
 }

@@ -43,8 +43,8 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
             })
         })
             .then(() => rerender())
-            .catch(() => {
-                toast.error('An error has occured. Please retry');
+            .catch(err => {
+                toast.error(`An error has occured. Please retry ${err}`);
             });
     }
 
