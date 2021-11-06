@@ -22,7 +22,6 @@ export function CommentFeed() {
         setHandleRerender(!handleRerender);
     };
 
-    // TODO: Add main post
     useEffect(() => {
         axios({
             method: 'POST',
