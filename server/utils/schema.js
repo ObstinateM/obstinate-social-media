@@ -9,7 +9,7 @@ const schema = Joi.object({
 
     email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
 })
-    .with('username', 'birth_year')
+    .with('name', 'autre parametre')
     .with('password', 'repeat_password');
 
-schema.validate({ username: 'abc', birth_year: 1994 });
+schema.validate({ name: 'abc', birth_year: 1994 });

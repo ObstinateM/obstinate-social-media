@@ -82,7 +82,7 @@ export function App() {
     return (
         <UserContext.Provider value={value}>
             <Toaster />
-            <Router forceRefresh={true}>
+            <Router forceRefresh={false}>
                 <Navbar />
                 <main>
                     <Switch>
