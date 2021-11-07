@@ -32,12 +32,8 @@ export function Navbar() {
             <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Twitter V2" />
             <UserInfo picture={user.avatar} name={user.name} />
             <NavSection sectionName="MAIN NAVIGATION">
-                <NavItem icon="http://localhost:3000/images/dashboard.png" title="Home" href="/" />
-                <NavItem
-                    icon="http://localhost:3000/images/settings.png"
-                    title="My Profil"
-                    href={`/profil/${user.id}`}
-                />
+                <NavItem icon="http://localhost:3000/images/home.png" title="Home" href="/" />
+                <NavItem icon="http://localhost:3000/images/user.png" title="My Profil" href={`/profil/${user.id}`} />
                 <NavItem icon="http://localhost:3000/images/settings.png" title="Settings" href="/admin" />
                 <NavItem icon="http://localhost:3000/images/logout.png" title="Logout" click={logout} />
             </NavSection>

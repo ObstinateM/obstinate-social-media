@@ -7,7 +7,8 @@ const logLogin = require('debug')('auth:login');
 const login = (req, res) => {
     const { email, password } = req.body;
     logLogin(`${email} is trying to login`);
-    let query = `SELECT * FROM users WHERE email='${email}'`;
+    let query = `SELECT * FROM users WHERE email = ?`;
+    let values = [email];
     Connect()
         .then(connection => {
             Query(connection, query)
