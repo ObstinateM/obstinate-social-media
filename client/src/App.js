@@ -86,7 +86,7 @@ export function App() {
 
     return (
         <UserContext.Provider value={value}>
-            <Toaster />
+            <Toaster position="top-right" />
             <Router forceRefresh={true}>
                 <Navbar />
                 <main>

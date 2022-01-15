@@ -53,7 +53,8 @@ export function CreatePost({ isShowing, toggle }) {
                         <h1>Create a post</h1>
                         {error ? <h3 className="error">ERROR : {error}</h3> : null}
                         <textarea ref={content} name="content" placeholder="Write your post text here..."></textarea>
-                        <input type="file" name="" id="" />
+                        {/* TODO: Add image input logic */}
+                        {/* <input type="file" name="" id="" /> */}
                         <button className="submit-button" type="submit">
                             Create
                         </button>

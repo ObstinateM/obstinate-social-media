@@ -11,4 +11,5 @@ main {
     right: 2rem;
     bottom: 2rem;
     border-radius: 50%;
+    border: none;
 }
