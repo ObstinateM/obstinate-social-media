@@ -22,11 +22,12 @@
 
 .profil-bio {
     font-size: 0.75rem;
-    margin: 0 2rem;
+    margin: 0.5rem 2rem 0 2rem;
 }
 
 .profil-img-align {
     align-self: center;
+    margin-bottom: 1rem;
 }
 
 .profil-img-align img {

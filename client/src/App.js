@@ -1,5 +1,5 @@
 // React & Axios
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useCallback } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import axios from 'axios';
 
@@ -15,6 +15,7 @@ import { HomePage } from 'Pages/Home/Home';
 import { CommentPage } from 'Pages/Comment/Comment';
 import { ProfilPage } from 'Pages/Profil/Profil';
 import { ChatPage } from 'Pages/Chat/Chat';
+import { SettingPage } from 'Pages/Setting/Setting';
 
 // Context
 import { UserContext } from 'Context/UserContext';
@@ -27,10 +28,12 @@ export function App() {
     const [user, setUser] = useState({});
     const [isLoading, setIsLoading] = useState(true);
 
-    const refreshToken = () => {
+    const refreshToken = useCallback((force = false) => {
         axios({
             method: 'GET',
-            url: `${process.env.REACT_APP_APIHOST}/api/auth/refresh`,
+            url: force
+                ? `${process.env.REACT_APP_APIHOST}/api/auth/refresh?force=true`
+                : `${process.env.REACT_APP_APIHOST}/api/auth/refresh`,
             withCredentials: true
         })
             .then(res => {
@@ -48,7 +51,7 @@ export function App() {
                 console.log(err);
             })
             .finally(() => setIsLoading(false));
-    };
+    }, []);
 
     useEffect(() => {
         refreshToken();
@@ -61,9 +64,10 @@ export function App() {
             isLoggedIn,
             setIsLoggedIn,
             user,
-            setUser
+            setUser,
+            refreshToken
         }),
-        [isLoading, isLoggedIn, user]
+        [isLoading, isLoggedIn, user, refreshToken]
     );
 
     if (isLoading) return <h1>Loading...</h1>;
@@ -92,6 +96,7 @@ export function App() {
                         <Route path="/post/:id" component={CommentPage} />
                         <Route path="/chat/:id" component={ChatPage} />
                         <Route path="/chat/" component={ChatPage} />
+                        <Route path="/setting/" component={SettingPage} />
                         <GuardedRoute path="/admin" canAccess={false} component={() => <h1>Admin</h1>} />
                         <Route path="/" component={() => <h1>404 Error</h1>} />
                     </Switch>

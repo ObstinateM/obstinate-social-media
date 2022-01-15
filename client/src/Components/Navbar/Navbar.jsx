@@ -35,7 +35,7 @@ export function Navbar() {
                 <NavItem icon="http://localhost:3000/images/home.png" title="Home" href="/" />
                 <NavItem icon="http://localhost:3000/images/conversation.png" title="Chat" href="/chat" />
                 <NavItem icon="http://localhost:3000/images/user.png" title="Profil" href={`/profil/${user.id}`} />
-                <NavItem icon="http://localhost:3000/images/settings.png" title="Settings" href="/admin" />
+                <NavItem icon="http://localhost:3000/images/settings.png" title="Settings" href="/setting" />
                 <NavItem icon="http://localhost:3000/images/logout.png" title="Logout" click={logout} />
             </NavSection>
         </nav>
