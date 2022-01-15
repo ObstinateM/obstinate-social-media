@@ -50,7 +50,7 @@ const Query = async (connection, query) => {
 };
 
 const safeQuery = async (connection, query, values) => {
-    logQuery('Trying to query %o', query);
+    logQuery('Trying to query %o', query, values);
     return new Promise((resolve, reject) => {
         connection.query(query, values, (error, result) => {
             if (error) {
@@ -65,4 +65,23 @@ const safeQuery = async (connection, query, values) => {
     });
 };
 
-module.exports = { Connect, Query, safeQuery };
+const MultipleQuery = async (connection, query, values) => {
+    logQuery('Trying to query %o', query, values);
+    return new Promise((resolve, reject) => {
+        connection.query(query, values, (error, result) => {
+            if (error) {
+                logQuery('ERROR: %s', error);
+                reject(error);
+                return;
+            }
+            logQuery('Successfully queried "%O"', result);
+            resolve(result);
+        });
+    });
+};
+
+const EndConnection = connection => {
+    connection.end();
+};
+
+module.exports = { Connect, Query, safeQuery, MultipleQuery, EndConnection };

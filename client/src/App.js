@@ -14,6 +14,7 @@ import GuardedRoute from 'Components/GuaredRoute/GuaredRoute';
 import { HomePage } from 'Pages/Home/Home';
 import { CommentPage } from 'Pages/Comment/Comment';
 import { ProfilPage } from 'Pages/Profil/Profil';
+import { ChatPage } from 'Pages/Chat/Chat';
 
 // Context
 import { UserContext } from 'Context/UserContext';
@@ -89,6 +90,8 @@ export function App() {
                         <Route path="/" exact component={HomePage} />
                         <Route path="/profil/:id" component={ProfilPage} />
                         <Route path="/post/:id" component={CommentPage} />
+                        <Route path="/chat/:id" component={ChatPage} />
+                        <Route path="/chat/" component={ChatPage} />
                         <GuardedRoute path="/admin" canAccess={false} component={() => <h1>Admin</h1>} />
                         <Route path="/" component={() => <h1>404 Error</h1>} />
                     </Switch>

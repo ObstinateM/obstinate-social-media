@@ -1,7 +1,7 @@
 const { StatusCodes } = require('http-status-codes');
 const bcrypt = require('bcrypt');
 const { generateRefreshToken, generateAccessToken, addRefreshTokentoDB } = require('../../utils/signJWT');
-const { Connect, Query } = require('../../utils/db');
+const { Connect, Query, safeQuery } = require('../../utils/db');
 const logLogin = require('debug')('auth:login');
 
 const login = (req, res) => {
@@ -11,7 +11,7 @@ const login = (req, res) => {
     let values = [email];
     Connect()
         .then(connection => {
-            Query(connection, query)
+            safeQuery(connection, query, values)
                 .then(users => {
                     bcrypt.compare(password, users[0].password, (error, result) => {
                         if (error) {

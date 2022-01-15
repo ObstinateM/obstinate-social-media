@@ -20,7 +20,10 @@ const request = [
     'CREATE TABLE refreshToken(INT PRIMARY KEY, refreshToken VARCHAR(255));',
     'CREATE TABLE posts(id INT PRIMARY KEY, id_user INT, content TEXT, image TEXT, FOREIGN KEY (id_user) REFERENCES users(id))',
     'CREATE TABLE comments(id INT PRIMARY KEY, user_id INT, post_id INT,content TEXT, FOREIGN KEY (user_id) REFERENCES users(id), FOREIGN KEY (post_id) REFERENCES posts(id))',
-    'CREATE TABLE like(id INY PRIMARY KEY AUTO INCREMENT, post_liked INT, FOREIGN KEY (post_liked) REFERENCES posts(id))'
+    'CREATE TABLE like(id INY PRIMARY KEY AUTO INCREMENT, post_liked INT, FOREIGN KEY (post_liked) REFERENCES posts(id))',
+    'CREATE TABLE rooms(id INT PRIMARY KEY AUTO_INCREMENT)',
+    'CREATE TABLE room_user(id INT PRIMARY KEY AUTO_INCREMENT, room_id INT, user_id INT, FOREIGN KEY (room_id) REFERENCES rooms(id), FOREIGN KEY (user_id) REFERENCES users(id))',
+    'CREATE TABLE messages(id INT PRIMARY KEY AUTO_INCREMENT, room_id INT, user_id INT, content TEXT, timestamp VARCHAR(150), FOREIGN KEY (room_id) REFERENCES rooms(id), FOREIGN KEY (user_id) REFERENCES users(id))'
 ];
 
 request.forEach(element =>

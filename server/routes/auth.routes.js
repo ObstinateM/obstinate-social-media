@@ -4,7 +4,7 @@ const login = require('../controllers/auth/login.controllers');
 const register = require('../controllers/auth/register.controllers');
 const refresh = require('../controllers/auth/refreshToken.controllers');
 const logout = require('../controllers/auth/logout.controllers');
-const extractJWT = require('../middleware/extractJWT.middleware');
+const { extractJWT } = require('../middleware/extractJWT.middleware');
 
 const router = Router();
 
