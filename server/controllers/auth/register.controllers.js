@@ -28,7 +28,7 @@ const register = (req, res) => {
                         .json({ message: 'Server Error: Please try again' });
                 }
 
-                let query = `INSERT INTO users(name, email, password) VALUES ("${name}", "${email}", "${hash}");`;
+                let query = `INSERT INTO users(name, email, password, avatar) VALUES ("${name}", "${email}", "${hash}", "${process.env.API_URL}/images/boy.png");`;
 
                 Connect()
                     .then(connection => {

@@ -1,7 +1,6 @@
 require('dotenv').config();
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
-const { resolve } = require('path/posix');
 const log = require('debug')('JWT');
 const logValidate = log.extend('validate');
 
@@ -16,6 +15,7 @@ const extractJWT = (req, res, next) => {
             } else {
                 logValidate('Token has been validated');
                 res.locals.jwt = decoced;
+                req.jwt = decoced;
                 next();
             }
         });

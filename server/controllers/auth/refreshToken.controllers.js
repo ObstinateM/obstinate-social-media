@@ -8,10 +8,13 @@ const {
 } = require('../../utils/signJWT');
 const jwt = require('jsonwebtoken');
 const logRefresh = require('debug')('auth:refreshToken');
+const { Connect, safeQuery } = require('../../utils/db');
 
 const refresh = (req, res) => {
     logRefresh('User is refreshing his token');
     const refreshToken = req.cookies.refreshToken;
+    const { force } = req.query;
+    logRefresh('It is a forced refresh : ', force);
 
     if (!refreshToken) {
         logRefresh('Rejected: User is not authentificated');
@@ -47,53 +50,55 @@ const refresh = (req, res) => {
                     // Jour * heure * nb minute/heure * nb/seconde * nb ms
                     let expRefresh = Math.floor((Date.now() + 23 * 24 * 60 * 60 * 1000) / 1000);
                     logRefresh(`Le token va expirer ? (${expRefresh}, ${user.exp}, ${expRefresh >= user.exp})`);
-                    if (expRefresh >= user.exp) {
+                    if (expRefresh >= user.exp || force) {
                         // on doit refresh le token ici
-                        deleteRefreshToken(refreshToken, result => {
-                            if (result.isValid) {
-                                let accessToken = generateAccessToken(user);
-                                let refreshToken = generateRefreshToken(user);
-                                addRefreshTokentoDB(refreshToken, err => {
-                                    if (err) {
-                                        logRefresh('Rejected: Failed to add token to db');
-                                        return res
-                                            .status(StatusCodes.INTERNAL_SERVER_ERROR)
-                                            .cookie('refreshToken', '', {
-                                                httpOnly: true,
-                                                maxAge: 0
-                                            })
-                                            .json({
-                                                message:
-                                                    'An error occurred while refreshing token. Please relogin manually.'
-                                            });
-                                    } else {
-                                        logRefresh('Successfully refreshed token');
-                                        return res
-                                            .cookie('refreshToken', refreshToken, {
-                                                httpOnly: true,
-                                                expires: new Date(Date.now() + 30 * 24 * 59 * 60 * 1000) // Cookie removed after 24 hours
-                                            })
-                                            .status(StatusCodes.ACCEPTED)
-                                            .json({
-                                                id: user.id,
-                                                name: user.name,
-                                                email: user.email,
-                                                avatar: user.avatar,
-                                                bio: user.bio,
-                                                accessToken
-                                            });
-                                    }
-                                });
-                            } else {
-                                logRefresh('Rejected: Token not deleted in database');
-                                return res
-                                    .status(500)
-                                    .cookie('refreshToken', '', {
-                                        httpOnly: true,
-                                        maxAge: 0
-                                    })
-                                    .json({ message: 'Token is invalid.' });
-                            }
+                        refreshUser(user).then(user => {
+                            deleteRefreshToken(refreshToken, result => {
+                                if (result.isValid) {
+                                    let accessToken = generateAccessToken(user);
+                                    let refreshToken = generateRefreshToken(user);
+                                    addRefreshTokentoDB(refreshToken, err => {
+                                        if (err) {
+                                            logRefresh('Rejected: Failed to add token to db');
+                                            return res
+                                                .status(StatusCodes.INTERNAL_SERVER_ERROR)
+                                                .cookie('refreshToken', '', {
+                                                    httpOnly: true,
+                                                    maxAge: 0
+                                                })
+                                                .json({
+                                                    message:
+                                                        'An error occurred while refreshing token. Please relogin manually.'
+                                                });
+                                        } else {
+                                            logRefresh('Successfully refreshed token');
+                                            return res
+                                                .cookie('refreshToken', refreshToken, {
+                                                    httpOnly: true,
+                                                    expires: new Date(Date.now() + 30 * 24 * 59 * 60 * 1000) // Cookie removed after 24 hours
+                                                })
+                                                .status(StatusCodes.ACCEPTED)
+                                                .json({
+                                                    id: user.id,
+                                                    name: user.name,
+                                                    email: user.email,
+                                                    avatar: user.avatar,
+                                                    bio: user.bio,
+                                                    accessToken
+                                                });
+                                        }
+                                    });
+                                } else {
+                                    logRefresh('Rejected: Token not deleted in database');
+                                    return res
+                                        .status(500)
+                                        .cookie('refreshToken', '', {
+                                            httpOnly: true,
+                                            maxAge: 0
+                                        })
+                                        .json({ message: 'Token is invalid.' });
+                                }
+                            });
                         });
                     } else {
                         logRefresh('Token is valid and will not expire, successfully refreshed token');
@@ -119,6 +124,14 @@ const refresh = (req, res) => {
                 })
                 .json({ message: 'Token is invalid.' });
         }
+    });
+};
+
+const refreshUser = user => {
+    return new Promise(async (resolve, reject) => {
+        const connection = await Connect();
+        const newUser = await safeQuery(connection, 'SELECT * FROM users WHERE id = ?', [user.id]);
+        resolve(newUser[0]);
     });
 };
 

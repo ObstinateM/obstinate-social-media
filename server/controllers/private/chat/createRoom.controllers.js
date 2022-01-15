@@ -1,4 +1,4 @@
-const { Connect, MultipleQuery } = require('../../../utils/db');
+const { Connect, MultipleQuery, EndConnection } = require('../../../utils/db');
 const logCreate = require('debug')('chat:createroom');
 
 const createroom = async (req, res) => {
@@ -21,6 +21,7 @@ const createroom = async (req, res) => {
                 user
             ]);
         });
+        EndConnection(connection);
         logCreate(`Room created with id ${roomId[0].id}`);
         res.status(200).json({
             message: 'Room created',

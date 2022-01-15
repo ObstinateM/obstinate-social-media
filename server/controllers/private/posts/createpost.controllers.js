@@ -1,5 +1,5 @@
 const { StatusCodes } = require('http-status-codes');
-const { Connect, Query } = require('../../../utils/db');
+const { Connect, safeQuery } = require('../../../utils/db');
 const logCreate = require('debug')('post:create');
 
 const createpost = (req, res) => {
@@ -7,11 +7,12 @@ const createpost = (req, res) => {
     const { content, image } = req.body;
     logCreate(`${user.id} : ${user.name} is trying to create a new post`);
     let query = image
-        ? `INSERT INTO posts(id_user, content, image) VALUES (${user.id}, '${content}', '${image}');`
-        : `INSERT INTO posts(id_user, content) VALUES (${user.id}, '${content}');`;
+        ? `INSERT INTO posts(id_user, content, image) VALUES (?, ?, ?);`
+        : `INSERT INTO posts(id_user, content) VALUES (?, ?);`;
+    let values = image ? [user.id, content, image] : [user.id, content];
     Connect()
         .then(connection => {
-            Query(connection, query)
+            safeQuery(connection, query, values)
                 .then(result => {
                     logCreate('Success: Post created');
                     res.status(StatusCodes.CREATED).json({ message: 'Post created.', result });

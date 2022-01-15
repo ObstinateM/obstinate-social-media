@@ -25,6 +25,8 @@ const { userRouter } = require('./routes/user.routes');
 const { postsRouter } = require('./routes/posts.routes');
 const { commentsRouter } = require('./routes/comments.routes');
 const { chatRouter } = require('./routes/chat.routes');
+const { followRouter } = require('./routes/follow.routes');
+const { userPrivateRouter } = require('./routes/private_user.routes');
 
 //middleware
 app.use(
@@ -33,6 +35,7 @@ app.use(
         credentials: true
     })
 );
+app.use(express.static(path.join(__dirname, './public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(helmet());
@@ -47,6 +50,8 @@ app.use('/api/public/user/', userRouter);
 app.use('/api/private/posts/', extractJWT, postsRouter);
 app.use('/api/private/comments/', extractJWT, commentsRouter);
 app.use('/api/private/chat/', extractJWT, chatRouter);
+app.use('/api/private/follow/', extractJWT, followRouter);
+app.use('/api/private/user/', extractJWT, userPrivateRouter);
 
 // Server Start
 server.listen(process.env.PORT || 3001, () => {
