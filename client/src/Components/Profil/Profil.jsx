@@ -19,6 +19,7 @@ export function UserFeed() {
     const { user } = useContext(UserContext);
     const [handleRerender, setHandleRerender] = useState(false);
     const [userProfil, setUserProfil] = useState({});
+    const [isFollowing, setIsFollowing] = useState(false);
     const { id } = useParams();
 
     const rerender = () => {
@@ -37,7 +38,6 @@ export function UserFeed() {
             })
         })
             .then(res => {
-                console.log(res.data.user);
                 setUserProfil(res.data.user);
             })
             .catch(err => {
@@ -63,9 +63,46 @@ export function UserFeed() {
                         console.log(err.response);
                         setIsLoading(false);
                     });
+
+                // Look if the user is following the page
+                if (!(Number(id) === Number(user.id))) {
+                    axios
+                        .get(`${process.env.REACT_APP_APIHOST}/api/private/follow/follow?follow=${id}`, {
+                            headers: {
+                                Authorization: `Bearer ${user.accessToken}`
+                            }
+                        })
+                        .then(res => {
+                            setIsFollowing(res.data.isFollowing);
+                        })
+                        .catch(err => {
+                            console.log(err.response);
+                        });
+                }
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [handleRerender]);
+
+    const onFollow = () => {
+        axios
+            .post(
+                `${process.env.REACT_APP_APIHOST}/api/private/follow/follow`,
+                {
+                    follow: id
+                },
+                {
+                    headers: {
+                        Authorization: `Bearer ${user.accessToken}`
+                    }
+                }
+            )
+            .then(res => {
+                setIsFollowing(!isFollowing);
+            })
+            .catch(err => {
+                console.log(err.response);
+            });
+    };
 
     if (isLoading) return <h1>Loading posts...</h1>;
 
@@ -77,6 +114,11 @@ export function UserFeed() {
                         <img src={userProfil.avatar} alt="user profile" className="profil-img" />
                     </div>
                     <h1>{userProfil.name}</h1>
+                    {!(Number(id) === Number(user.id)) && (
+                        <button className="chatnav-createbutton" onClick={onFollow}>
+                            {isFollowing ? 'Following' : 'Follow'}
+                        </button>
+                    )}
                 </div>
                 <div className="profil-bio">
                     <p>{userProfil.bio ? userProfil.bio : 'No super bio yet...'}</p>
