@@ -29,7 +29,7 @@ export function Navbar() {
 
     return (
         <nav>
-            <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Twitter V2" />
+            <NavTitle icon="http://localhost:3000/images/work-in-progress.png" title="Obsti's Social" />
             <UserInfo picture={user.avatar} name={user.name} />
             <NavSection sectionName="MAIN NAVIGATION">
                 <NavItem icon="http://localhost:3000/images/home.png" title="Home" href="/" />

@@ -60,7 +60,9 @@ export function Register() {
                     <label htmlFor="password2">Confirm Password</label>
                     <input type="password" name="password2" id="password2" placeholder="*********" ref={password2} />
                     <button onClick={handleSubmit}>Submit</button>
-                    <Link to="/">Forgot password ?</Link>
+                    <a href="#" onClick={() => toast('Not implemented!', { icon: '⚠️' })}>
+                        Forgot password ?
+                    </a>
                     <Link to="/login">Already an account?</Link>
                 </div>
             </div>

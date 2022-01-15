@@ -73,7 +73,9 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
             </div>
             <div className="action">
                 <div className="nbLikes">
-                    <p>{post.nbLikes} J'aime</p>
+                    <p>
+                        {post.nbLikes} {post.nbLikes > 1 ? 'Likes' : 'Like'}
+                    </p>
                 </div>
                 {canDelete ? (
                     <button onClick={handleDelete}>

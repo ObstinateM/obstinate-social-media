@@ -60,7 +60,9 @@ export function Login() {
                     <button onClick={handleSubmit} type="submit">
                         Submit
                     </button>
-                    <Link to="/">Forgot password ?</Link>
+                    <a href="#" onClick={() => toast('Not implemented!', { icon: '⚠️' })}>
+                        Forgot password ?
+                    </a>
                     <Link to="/register">No account?</Link>
                 </div>
             </div>
