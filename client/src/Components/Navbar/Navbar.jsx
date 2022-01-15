@@ -14,7 +14,7 @@ export function Navbar() {
     const logout = () => {
         axios({
             method: 'GET',
-            url: 'http://localhost:3001/api/auth/logout',
+            url: `${process.env.REACT_APP_APIHOST}/api/auth/logout`,
             withCredentials: true
         })
             .then(res => {

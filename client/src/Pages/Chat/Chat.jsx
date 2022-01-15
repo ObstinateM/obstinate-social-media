@@ -46,7 +46,7 @@ export function ChatPage() {
 
         // Fetching all users for room creation
         axios
-            .get('http://localhost:3001/api/public/user/getall')
+            .get(`${process.env.REACT_APP_APIHOST}/api/public/user/getall`)
             .then(res => {
                 setAllUsers(res['data'].filter(_user => _user.name !== user.name));
             })
@@ -73,7 +73,7 @@ export function ChatPage() {
         e.preventDefault();
         axios
             .post(
-                'http://localhost:3001/api/private/chat/create',
+                `${process.env.REACT_APP_APIHOST}/api/private/chat/create`,
                 {
                     users: selectedUsers
                 },

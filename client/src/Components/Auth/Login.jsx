@@ -19,7 +19,7 @@ export function Login() {
         setError(null);
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/auth/login',
+            url: `${process.env.REACT_APP_APIHOST}/api/auth/login`,
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
             data: JSON.stringify({

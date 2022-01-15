@@ -19,7 +19,7 @@ export function Feed() {
     useEffect(() => {
         axios({
             method: 'GET',
-            url: 'http://localhost:3001/api/private/posts/getallposts',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/posts/getallposts`,
             headers: { Authorization: `Bearer ${user.accessToken}` }
         })
             .then(res => {

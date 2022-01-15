@@ -25,7 +25,7 @@ export function CommentFeed() {
     useEffect(() => {
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/private/comments/getall',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/comments/getall`,
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${user.accessToken}`
@@ -74,7 +74,7 @@ function Comment({ comment, canDelete, rerender }) {
     const handleDelete = () => {
         axios({
             method: 'DELETE',
-            url: 'http://localhost:3001/api/private/comments/delete',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/comments/delete`,
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
             data: JSON.stringify({
                 comment_id: comment.id
@@ -117,7 +117,7 @@ function CreateNewComment({ rerender, isCommentsEmpty }) {
         setIsLoading(true);
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/private/comments/create',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/comments/create`,
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `Bearer ${user.accessToken}`

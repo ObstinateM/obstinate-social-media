@@ -28,7 +28,7 @@ export function UserFeed() {
     useEffect(() => {
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/public/user/getinfo/',
+            url: `${process.env.REACT_APP_APIHOST}/api/public/user/getinfo/`,
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -46,7 +46,7 @@ export function UserFeed() {
             .finally(() => {
                 axios({
                     method: 'POST',
-                    url: 'http://localhost:3001/api/private/posts/getuser/',
+                    url: `${process.env.REACT_APP_APIHOST}/api/private/posts/getuser/`,
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${user.accessToken}`

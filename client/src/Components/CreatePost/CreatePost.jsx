@@ -21,7 +21,7 @@ export function CreatePost({ isShowing, toggle }) {
         event.preventDefault();
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/private/posts/createpost/',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/posts/createpost/`,
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
             data: JSON.stringify({
                 content: content.current.value

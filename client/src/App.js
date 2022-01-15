@@ -30,7 +30,7 @@ export function App() {
     const refreshToken = () => {
         axios({
             method: 'GET',
-            url: 'http://localhost:3001/api/auth/refresh',
+            url: `${process.env.REACT_APP_APIHOST}/api/auth/refresh`,
             withCredentials: true
         })
             .then(res => {

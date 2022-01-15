@@ -19,7 +19,7 @@ export function Register() {
         setError(null);
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/auth/register',
+            url: `${process.env.REACT_APP_APIHOST}/api/auth/register`,
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({
                 name: name.current.value,

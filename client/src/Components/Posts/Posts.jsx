@@ -18,7 +18,7 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
         console.log(post.id);
         axios({
             method: 'DELETE',
-            url: 'http://localhost:3001/api/private/posts/delete',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/posts/delete`,
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
             data: JSON.stringify({
                 post_id: post.id
@@ -36,7 +36,7 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
     function handleLike() {
         axios({
             method: 'POST',
-            url: 'http://localhost:3001/api/private/posts/like',
+            url: `${process.env.REACT_APP_APIHOST}/api/private/posts/like`,
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${user.accessToken}` },
             data: JSON.stringify({
                 post_id: post.id
