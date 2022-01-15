@@ -1,0 +1,42 @@
+.chatnav {
+    border: 1px solid var(--white);
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.chatnav-header {
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--white);
+}
+
+.chatnav-spacing {
+    margin-bottom: 0.5rem;
+}
+
+.chatnav-createroom {
+    margin-top: auto;
+    justify-self: flex-end;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+}
+
+.chatnav-createbutton {
+    background-color: var(--bg-blue);
+    color: var(--white);
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--bg-blue);
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    outline: none;
+    transition: all 0.2s ease-in-out;
+}
+
+.chatnav-createbutton:hover {
+    border: 1px solid var(--main-blue);
+}

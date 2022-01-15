@@ -1,0 +1,2 @@
+-   Make all Query => safeQuery
+-   Change .then.catch with try catch and async await

@@ -1,6 +1,7 @@
 require('dotenv').config();
 const { StatusCodes } = require('http-status-codes');
 const jwt = require('jsonwebtoken');
+const { resolve } = require('path/posix');
 const log = require('debug')('JWT');
 const logValidate = log.extend('validate');
 
@@ -24,4 +25,23 @@ const extractJWT = (req, res, next) => {
     }
 };
 
-module.exports = extractJWT;
+const extractJWTfunction = token => {
+    return new Promise((resolve, reject) => {
+        if (token) {
+            jwt.verify(token, process.env.SERVER_TOKEN_SECRET, { algorithm: ['HS256'] }, (error, decoced) => {
+                if (error) {
+                    logValidate(`Token has been invalidated : ${error.message}`);
+                    throw new Error('No token found');
+                } else {
+                    logValidate('Token has been validated');
+                    resolve(decoced);
+                }
+            });
+        } else {
+            logValidate('No token found');
+            reject('No token found');
+        }
+    });
+};
+
+module.exports = { extractJWT, extractJWTfunction };

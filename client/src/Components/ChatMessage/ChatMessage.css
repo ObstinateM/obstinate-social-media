@@ -1,0 +1,47 @@
+:root {
+    --chat-message-background-color: #0dada780;
+    --black: #000000;
+}
+
+.message {
+    padding: 0.5rem 1rem;
+    margin: 0.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    width: 55%;
+    color: var(--black);
+}
+
+.text {
+    color: var(--black);
+    font-size: 0.9rem;
+    line-height: 1.3rem;
+}
+
+.mymessage {
+    align-self: flex-end;
+    background-color: var(--main-blue);
+    border-radius: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.othermessage {
+    align-self: flex-start;
+    background-color: var(--white);
+    border-radius: 0.5rem 0.5rem 0.5rem 0;
+}
+
+.sender {
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: var(--black);
+    margin-bottom: 1rem;
+    margin-top: 0.5rem;
+}
+
+.time {
+    font-size: 0.7rem;
+    color: var(--gray);
+    align-self: flex-end;
+    margin-top: 1rem;
+}
