@@ -5,7 +5,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server, {
     cors: {
-        origin: 'http://localhost:3000',
+        origin: process.env.FRONTHOST || 'http://localhost:3000',
         methods: ['GET', 'POST']
     }
 });
@@ -31,7 +31,7 @@ const { userPrivateRouter } = require('./routes/private_user.routes');
 //middleware
 app.use(
     cors({
-        origin: 'http://localhost:3000',
+        origin: process.env.FRONTHOST || 'http://localhost:3000',
         credentials: true
     })
 );
