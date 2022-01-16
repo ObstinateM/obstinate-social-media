@@ -49,7 +49,11 @@ export function ChatBox({ roomId, messages, userList, socket }) {
                 <form onSubmit={sendMessage} className="chat-form">
                     <input ref={message} type="text" className="chat-input" placeholder="Write your message here" />
                     <button className="chat-submit" type="submit">
-                        <img src="http://localhost:3000/images/send.png" alt="Send" className="chat-submit-image" />
+                        <img
+                            src={`${process.env.REACT_APP_FRONTHOST}/images/send.png`}
+                            alt="Send"
+                            className="chat-submit-image"
+                        />
                     </button>
                 </form>
             </div>

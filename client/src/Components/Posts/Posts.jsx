@@ -49,7 +49,7 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
     }
 
     function handleShare() {
-        navigator.clipboard.writeText(`http://localhost:3000/post/${post.id}`).then(
+        navigator.clipboard.writeText(`${process.env.REACT_APP_FRONTHOST}/post/${post.id}`).then(
             () => {
                 toast('Link copied to clipboard.', { duration: 3000, icon: 'ℹ️' });
             },
@@ -79,23 +79,23 @@ export function Post({ post, canDelete, rerender, highlight = false }) {
                 </div>
                 {canDelete ? (
                     <button onClick={handleDelete}>
-                        <img src="http://localhost:3000/images/bin.png" alt="Delete" />
+                        <img src={`${process.env.REACT_APP_FRONTHOST}/images/bin.png`} alt="Delete" />
                     </button>
                 ) : null}
                 {post.isLiked ? (
                     <button onClick={handleLike}>
-                        <img src="http://localhost:3000/images/heart-filled.png" alt="Like" />
+                        <img src={`${process.env.REACT_APP_FRONTHOST}/images/heart-filled.png`} alt="Like" />
                     </button>
                 ) : (
                     <button onClick={handleLike}>
-                        <img src="http://localhost:3000/images/heart-outline.png" alt="Like" />
+                        <img src={`${process.env.REACT_APP_FRONTHOST}/images/heart-outline.png`} alt="Like" />
                     </button>
                 )}
                 <Link to={`/post/${post.id}`}>
-                    <img src="http://localhost:3000/images/chat.png" alt="Comment" />
+                    <img src={`${process.env.REACT_APP_FRONTHOST}/images/chat.png`} alt="Comment" />
                 </Link>
                 <button onClick={handleShare}>
-                    <img src="http://localhost:3000/images/share.png" alt="Share" />
+                    <img src={`${process.env.REACT_APP_FRONTHOST}/images/share.png`} alt="Share" />
                 </button>
             </div>
         </div>

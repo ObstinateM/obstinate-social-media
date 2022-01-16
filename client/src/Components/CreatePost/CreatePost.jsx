@@ -47,7 +47,7 @@ export function CreatePost({ isShowing, toggle }) {
             <div className="modal">
                 <div className="input_post">
                     <button className="close-button" onClick={toggle}>
-                        <img src="http://localhost:3000/images/cancel.png" alt="Close" />
+                        <img src={`${process.env.REACT_APP_FRONTHOST}/images/cancel.png`} alt="Close" />
                     </button>
                     <form onSubmit={handleSubmit}>
                         <h1>Create a post</h1>

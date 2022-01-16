@@ -19,7 +19,7 @@ export function SettingPage() {
     const handleChangeDesc = () => {
         axios
             .post(
-                'http://localhost:3001/api/private/user/bio',
+                `${process.env.REACT_APP_APIHOST}/api/private/user/bio`,
                 {
                     bio: bioRef.current.value
                 },

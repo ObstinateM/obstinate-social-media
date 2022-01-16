@@ -15,7 +15,7 @@ export function HomePage() {
         <>
             <CreatePost isShowing={isShowing} toggle={toggle} />
             <button className="create-button" onClick={toggle}>
-                <img src="http://localhost:3000/images/writing.png" alt="Create new" />
+                <img src={`${process.env.REACT_APP_FRONTHOST}/images/writing.png`} alt="Create new" />
             </button>
             <Feed />
         </>
