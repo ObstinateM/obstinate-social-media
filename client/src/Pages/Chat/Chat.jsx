@@ -23,6 +23,7 @@ export function ChatPage() {
     const { isShowing, toggle } = useModal();
     const [allUsers, setAllUsers] = useState([]);
     const [selectedUsers, setSelectedUsers] = useState([]);
+    const [isNoRoom, setIsNoRoom] = useState(false);
     let history = useHistory();
 
     // Join first room / or room with id
@@ -42,6 +43,11 @@ export function ChatPage() {
         socket.on('userList', userList => setUserList(userList));
         socket.on('message', message => {
             setMessages(messages => [...messages, message]);
+        });
+        socket.on('no-room', () => {
+            setIsNoRoom(true);
+            toggle();
+            toast('You have no room created, create on to start chatting!', { icon: '⚠️' });
         });
 
         // Fetching all users for room creation
@@ -109,9 +115,11 @@ export function ChatPage() {
                         <button type="submit" className="createroom-button">
                             Create Room
                         </button>
-                        <button type="button" className="createroom-button" onClick={toggle}>
-                            Close
-                        </button>
+                        {!isNoRoom && (
+                            <button type="button" className="createroom-button" onClick={toggle}>
+                                Close
+                            </button>
+                        )}
                     </form>
                 </div>
             ) : (

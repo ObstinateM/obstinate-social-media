@@ -83,7 +83,8 @@ io.on('connection', socket => {
                 socket.emit('room-join', roomId);
             } else {
                 // Default room joined if no one is provided
-                socket.join(_query[0].room_id);
+                if (!_query[0]) return socket.emit('no-room');
+                socket.join(_query[0].room_id); // TODO: Verify if there is no room
                 if (!userRoom[user.id]) userRoom[user.id] = [];
                 userRoom[user.id].push(_query[0].room_id);
                 console.log('Default room joined');
