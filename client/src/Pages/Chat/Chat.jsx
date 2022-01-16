@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 import { useModal } from '../../Hook/useModal';
 import axios from 'axios';
-const ENDPOINT = 'http://127.0.0.1:3001';
+const ENDPOINT = process.env.REACT_APP_APIHOST;
 const socket = socketIOClient(ENDPOINT);
 
 export function ChatPage() {
