@@ -11,9 +11,11 @@ main {
 .post {
     display: flex;
     flex-direction: column;
-    min-width: 27rem;
+    width: 27rem;
     border: 1px solid var(--white);
     padding: 1rem 0;
+    overflow: auto;
+    overflow-wrap: anywhere;
 }
 
 .post-top {
