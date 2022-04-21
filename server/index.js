@@ -53,6 +53,8 @@ app.use('/api/private/chat/', extractJWT, chatRouter);
 app.use('/api/private/follow/', extractJWT, followRouter);
 app.use('/api/private/user/', extractJWT, userPrivateRouter);
 
+app.get('/', (req, res) => res.send("TEST")); 
+
 // Server Start
 server.listen(process.env.PORT || 3001, () => {
     logServer(`Server started. Available at http://localhost:${process.env.PORT || 3001}/`);

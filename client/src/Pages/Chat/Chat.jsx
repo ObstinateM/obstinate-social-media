@@ -5,13 +5,12 @@ import { ChatBox } from '../../Components/ChatBox/ChatBox';
 import { ChatNav } from '../../Components/ChatNav/ChatNav';
 import './Chat.css';
 import { UserContext } from 'Context/UserContext';
-import socketIOClient from 'socket.io-client';
+import { io } from 'socket.io-client';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 import { useModal } from '../../Hook/useModal';
 import axios from 'axios';
-const ENDPOINT = process.env.REACT_APP_APIHOST;
-const socket = socketIOClient(ENDPOINT);
+const socket = io(process.env.REACT_APP_APIHOST);
 
 export function ChatPage() {
     const { id } = useParams();
