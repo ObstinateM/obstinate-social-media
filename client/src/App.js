@@ -55,7 +55,6 @@ export function App() {
 
     useEffect(() => {
         refreshToken();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const value = useMemo(

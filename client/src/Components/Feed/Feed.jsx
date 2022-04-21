@@ -47,7 +47,6 @@ export function Feed() {
                 console.log(err.response);
                 setIsLoading(false);
             });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [handleRerender]);
 
     if (isLoading) return <h1>Loading posts...</h1>;

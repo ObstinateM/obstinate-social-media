@@ -42,7 +42,6 @@ export function CommentFeed() {
             .catch(err => {
                 setIsLoading(false);
             });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [handleRerender]);
 
     if (isLoading) return <h1>Loading comments...</h1>;

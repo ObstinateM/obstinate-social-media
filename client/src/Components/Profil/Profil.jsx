@@ -80,7 +80,6 @@ export function UserFeed() {
                         });
                 }
             });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [handleRerender]);
 
     const onFollow = () => {
