@@ -9,3 +9,5 @@
 `node .`
 
 Copy .env and change with your variable.
+
+f
